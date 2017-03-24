@@ -15,3 +15,24 @@
 |||GPIO9/SPI|21|22|GPIO25|||
 |||GPIO11/SPI|23|24|GPIO8|||
 |||GND|25|26|GPIO7|||
+
+# Adafruit PWM Driver Pinbelegung
+
+|Port|Bedeutung|
+|---|---|
+|0|Vertikaler Servo|
+|1|Horizontaler Servo|
+|2||
+|3||
+|4||
+|5||
+|6||
+|7||
+|8||
+|9||
+|10||
+|11||
+|12||
+|13||
+|14||
+|15||
