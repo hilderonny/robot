@@ -1,14 +1,11 @@
 #!/bin/sh
-# Initialisiert GIT und laedt hilderonny-robot
-# nach /data/gitlab/hilderonny-robot/pi4 herunter
+# PI 4 ist der Steuerer fuer die Kopfservos
 
-REPO=pi4
+echo "Installing PI 4..."
 
-apt-get update
-apt-get install git
-git config --global user.name "hilderonny"
-git config --global user.email "gitlab@hildebrandt2014.de"
-mkdir -p /data/gitlab/hilderonny-robot
-git clone https://hilderonny@gitlab.com/hilderonny-robot/$REPO.git /data/gitlab/hilderonny-robot/$REPO
-chmod +x /data/gitlab/hilderonny-robot/$REPO/update.sh
-sh /data/gitlab/hilderonny-robot/$REPO/update.sh
+echo "Installing packages ..."
+apt-get install python python-smbus i2c-tools python-pip python-dev
+pip install --upgrade adafruit-pca9685
+#mkdir -p /github/adafruit
+#git clone https://github.com/adafruit/Adafruit_Python_PCA9685.git /github/adafruit/Adafruit_Python_PCA9685
+#python /github/adafruit/Adafruit_Python_PCA9685/setup.py install
