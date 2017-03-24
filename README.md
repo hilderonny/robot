@@ -10,3 +10,11 @@ Unterverzeichnis initialisiert. Das wird mit `install.sh` gemacht:
 * Mit root anmelden
 * `sh /boot/install.sh *UNTERVERZEICHNIS* *SSID* *PSK*` ausführen, wobei Unterverzeichnis *pi1*, *pi2*, etc. sein kann.
 * Freuen
+
+# Aufgaben der einzelnen Himbeeren
+
+||Knoten||Aufgabe||
+|pi1|Zentraler Kommunikationsknoten mit Access Point, DHCP-Server, DNS, Router, Webserver|
+|pi2|Linkes Auge|
+|pi3|Rechtes Auge|
+|pi4|Kopfmechanik|

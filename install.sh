@@ -58,4 +58,5 @@ git clone https://hilderonny@gitlab.com/hilderonny/robot.git $INSTALLPATH
 echo "Running install script for $SUBDIR ..."
 sh $INSTALLPATH/$SUBDIR/install.sh "$SSID" "$PSK"
 
+echo "Done ./install"
 exit 0
