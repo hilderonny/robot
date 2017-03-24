@@ -2,7 +2,7 @@
 
 |Farbe|Funktion|Bedeutung|PIN|PIN|Bedeutung|Funktion|Farbe|
 |---|---|---|---|---|---|---|---|
-|||3.3V|1|2|5V|Stromversorgung +|rot|
+|blau|VCC|3.3V|1|2|5V|Stromversorgung +|rot|
 |lila|SDA|GPIO0/I²C|3|4|5V|||
 |grau|SCL|GPIO1/I²C|5|6|GND|Stromversorgung -|schwarz|
 |||GPIO4|7|8|GPIO14/UART TXD|||
