@@ -56,7 +56,7 @@ mkdir -p $INSTALLPATH
 git clone https://hilderonny@gitlab.com/hilderonny/robot.git $INSTALLPATH
 
 echo "Running install script for $SUBDIR ..."
-sh $INSTALLPATH/$SUBDIR/install.sh "$SSID" "$PSK"
+sh $INSTALLPATH/$SUBDIR/install.sh
 
 echo "Done ./install"
 exit 0
