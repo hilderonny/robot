@@ -19,6 +19,7 @@ ExecStart=/usr/bin/python /gitlab/hilderonny/robot/pi4/pi4.py
 WantedBy=default.target
 EOM
 chmod 644 /etc/systemd/system/pi4.service
+systemctl enable pi4.service
 systemctl daemon-reload
 systemctl start pi4.service
 
