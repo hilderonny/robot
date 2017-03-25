@@ -53,6 +53,7 @@ ExecStart=/usr/bin/python /gitlab/hilderonny/robot/pi1/pi1.py
 WantedBy=default.target
 EOM
 chmod 644 /etc/systemd/system/pi1.service
+systemctl enable pi1.service
 systemctl daemon-reload
 systemctl start pi1.service
 
