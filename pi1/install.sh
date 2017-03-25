@@ -8,7 +8,7 @@ echo "Installing dependencies ..."
 apt-get install dnsmasq libttspico-utils
 
 echo "Installing DNS server ..."
-echo > /etc/dnsmasq.conf <<< EOM
+echo > /etc/dnsmasq.conf << EOM
 domain-needed
 bogus-priv
 interface=eth0
@@ -18,7 +18,7 @@ dhcp-option=3,10.0.0.1
 dhcp-range=interface:eth0,10.0.0.2,10.0.0.250,infinite
 dhcp-range=interface:wlan0,10.0.1.2,10.0.1.250,infinite
 EOM
-echo > /etc/network/interfaces <<< EOM
+echo > /etc/network/interfaces << EOM
 auto lo
 iface lo inet loopback
 auto eth0
