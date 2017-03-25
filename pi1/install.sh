@@ -32,6 +32,8 @@ iface wlan0 inet static
 auto wlan1
 iface wlan1 inet dhcp
     wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+up iptables -t nat -F
+up iptables -t nat -A POSTROUTING -o wlan1 -j MASQUERADE
 up sysctl -w net.ipv4.ip_forward=1
 EOM
 /etc/init.d/networking restart
