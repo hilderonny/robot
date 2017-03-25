@@ -6,6 +6,21 @@ echo "Installing PI 4..."
 echo "Installing packages ..."
 apt-get install python python-smbus i2c-tools python-pip python-dev
 pip install --upgrade adafruit-pca9685
-#mkdir -p /github/adafruit
-#git clone https://github.com/adafruit/Adafruit_Python_PCA9685.git /github/adafruit/Adafruit_Python_PCA9685
-#python /github/adafruit/Adafruit_Python_PCA9685/setup.py install
+
+echo "Setting up daemon ..."
+echo > /etc/systemd/system/pi4.service <<< EOM
+[Unit]
+Description=PI 4 Hauptprogramm
+After=network.target
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /gitlab/hilderonny/robot/pi4/pi4.py
+[Install]
+WantedBy=default.target
+EOM
+chmod 644 /etc/systemd/system/pi4.service
+systemctl daemon-reload
+systemctl start pi4.service
+
+echo "rebooting ..."
+reboot
