@@ -2,10 +2,12 @@
 
 # Richtet den Raspberry als pi1 (Kommunikationsknoten)
 # mit Access Point, DNS Server, DHCP Server und
-# zentralem Webserver ein
+# zentralem Webserver ein, ach ja und mit Audio
+
+echo "Installing dependencies ..."
+apt-get install dnsmasq libttspico-utils
 
 echo "Installing DNS server ..."
-apt-get install dnsmasq
 echo > /etc/dnsmasq.conf <<< EOM
 domain-needed
 bogus-priv
