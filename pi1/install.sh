@@ -5,7 +5,7 @@
 # zentralem Webserver ein, ach ja und mit Audio
 
 echo "Installing dependencies ..."
-apt-get install dnsmasq libttspico-utils
+apt-get install dnsmasq libttspico-utils python python-pip python-flask
 
 echo "Installing DNS server ..."
 cat > /etc/dnsmasq.conf << EOM
@@ -37,6 +37,25 @@ up iptables -t nat -A POSTROUTING -o wlan1 -j MASQUERADE
 up sysctl -w net.ipv4.ip_forward=1
 EOM
 /etc/init.d/networking restart
+
+echo "Initializing sound ..."
+amixer set PCM -- 75%
+
+echo "Setting up daemon ..."
+cat > /etc/systemd/system/pi1.service << EOM
+[Unit]
+Description=PI 1 Hauptprogramm
+After=network.target
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /gitlab/hilderonny/robot/pi1/pi1.py
+[Install]
+WantedBy=default.target
+EOM
+chmod 644 /etc/systemd/system/pi1.service
+systemctl daemon-reload
+systemctl start pi1.service
+
 
 echo "Done pi1/install"
 exit 0

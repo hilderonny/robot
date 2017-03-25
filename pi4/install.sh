@@ -8,7 +8,7 @@ apt-get install python python-smbus i2c-tools python-pip python-dev
 pip install --upgrade adafruit-pca9685
 
 echo "Setting up daemon ..."
-echo > /etc/systemd/system/pi4.service <<< EOM
+cat > /etc/systemd/system/pi4.service << EOM
 [Unit]
 Description=PI 4 Hauptprogramm
 After=network.target
