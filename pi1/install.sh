@@ -39,7 +39,7 @@ EOM
 /etc/init.d/networking restart
 
 echo "Initializing sound ..."
-amixer set PCM -- 75%
+amixer set PCM -- 80%
 
 echo "Setting up daemon ..."
 cat > /etc/systemd/system/pi1.service << EOM
