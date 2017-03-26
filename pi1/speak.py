@@ -4,12 +4,16 @@
 # from speak import *
 # speak('Hallo Welt!')
 import subprocess
+from thread import start_new_thread
 
-def speak(text):
+def speakThread(text):
 	subprocess.call(['pico2wave', '-l', 'de-DE', '-w', 'temp.wav', text])
 	subprocess.call(['aplay', 'temp.wav'])
 	subprocess.call(['rm', 'temp.wav'])
 	print text
+
+def speak(text):
+	start_new_thread(speakThread,(text,))
 
 if __name__ == '__main__':
 	import sys

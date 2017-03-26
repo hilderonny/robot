@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Webserver mit Socket
-from flask import Flask
+from flask import Flask, request
 from speak import *
 from subprocess import call
 import json, io, os.path
@@ -29,6 +29,12 @@ def update():
 	speak('Aktualisierung durchgeführt')
 	return 'Update complete'
 
+@app.route('/sprechen', methods=['POST'])
+def sprechen():
+	text = request.form['text']
+	speak(text)
+	return text
+
 @app.route('/lauter')
 def lauter():
 	volume = settings['volume']
@@ -56,9 +62,9 @@ def leiser():
 	return '{}'.format(volume)
 
 @app.route('/')
-def hello():
+def index():
 	speak('Da will einer was')
-	return 'Wassn los?'
+	return app.send_static_file('index.html')
 
 if __name__ == '__main__':
 	setzeLautstaerke()
