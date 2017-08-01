@@ -53,6 +53,7 @@ apt-get --yes --force-yes install git
 
 echo "Cloning repository ..."
 mkdir -p $INSTALLPATH
+git config credential.helper store
 git clone https://hilderonny@gitlab.com/hilderonny/robot.git $INSTALLPATH
 
 echo "Running install script for $SUBDIR ..."

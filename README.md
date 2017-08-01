@@ -13,7 +13,8 @@ Unterverzeichnis initialisiert. Das wird mit `install.sh` gemacht:
 
 # Aufgaben der einzelnen Himbeeren
 
-||Knoten||Aufgabe||
+|Knoten|Aufgabe|
+|---|---|
 |pi1|Zentraler Kommunikationsknoten mit Access Point, DHCP-Server, DNS, Router, Webserver|
 |pi2|Linkes Auge|
 |pi3|Rechtes Auge|

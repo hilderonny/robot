@@ -69,5 +69,20 @@ mkdir /gitlab/hilderonny-robot
 git clone https://hilderonny@gitlab.com/hilderonny-robot/pi1.git /gitlab/hilderonny-robot/pi1
 ```
 
+# Audio-Ausgabe
+
+Einstellen der Lautstärke
+
+```
+amixer set PCM -- 100%
+```
+
+Testausgabe
+
+```
+pico2wave -l "de-DE" -w temp.wav "Hallo Welt!" && aplay temp.wav && rm temp.wav
+```
+
 # Links
 * [Router HowTo](https://wiki.ubuntuusers.de/Router/)
+* [TTS mit Python](https://pypi.python.org/pypi/talkey/0.1.1)
