@@ -50,6 +50,8 @@ invoke-rc.d ssh start
 echo "Installing packages ..."
 apt-get update
 apt-get --yes --force-yes install git
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs
 
 echo "Cloning repository ..."
 mkdir -p $INSTALLPATH
