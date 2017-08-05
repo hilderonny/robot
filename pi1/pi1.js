@@ -22,6 +22,9 @@ var express = require('express');
 var httpProxy = require('http-proxy');
 
 httpProxy.createProxyServer({target:'http://10.0.0.2:80'}).listen(82);
+httpProxy.createProxyServer({target:'http://10.0.0.3:80'}).listen(83);
+httpProxy.createProxyServer({target:'http://10.0.0.4:80'}).listen(84);
+httpProxy.createProxyServer({target:'http://10.0.0.5:80'}).listen(85);
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
