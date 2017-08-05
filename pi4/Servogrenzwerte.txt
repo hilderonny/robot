@@ -1,0 +1,10 @@
+Rechte Hand (Pulsweiten mit Raspberry PI un I2C Board)
+
+Bedeutung        Von Mitte Bis
+
+Handgelenk       230 430 590
+Daumen           230 430 580
+Zeigefinger      220 430 570
+Mittelfinger     220 430 580
+Ringfinger       250 430 580
+Kleiner Finger   270 430 600
