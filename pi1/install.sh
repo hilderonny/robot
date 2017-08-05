@@ -48,7 +48,7 @@ Description=PI 1 Hauptprogramm
 After=network.target
 [Service]
 Type=idle
-ExecStart=/usr/bin/python /gitlab/hilderonny/robot/pi1/pi1.py
+ExecStart=/usr/bin/node /gitlab/hilderonny/robot/pi1/pi1.js
 [Install]
 WantedBy=default.target
 EOM
