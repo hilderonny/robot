@@ -1,0 +1,25 @@
+{
+  "name": "pi1",
+  "version": "1.0.0",
+  "description": "Als root anmelden und Edimax WLAN Adapter einstecken.",
+  "main": "pi1.js",
+  "dependencies": {
+    "express": "^4.15.3",
+    "express-http-proxy": "^1.0.6",
+    "http-proxy": "^1.16.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/hilderonny/robot.git"
+  },
+  "author": "Ronny Hildebrandt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/hilderonny/robot/issues"
+  },
+  "homepage": "https://gitlab.com/hilderonny/robot#README"
+}

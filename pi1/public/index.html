@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>J.A.R.V.I.S.</title>
+    <script>
+window.addEventListener('load', function() {
+  var url2 = 'http://' + location.host + ':82/video_feed';
+  document.getElementById('pi2img').src = url2; 
+  var url3 = 'http://' + location.host + ':83/video_feed';
+  document.getElementById('pi3img').src = url3; 
+});
+    </script>
+  </head>
+  <body>
+    <img id="pi2img"/>
+    <img id="pi3img"/>
+  </body>
+</html>
