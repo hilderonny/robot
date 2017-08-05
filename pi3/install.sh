@@ -12,6 +12,8 @@ mkdir -p /gitlab/hilderonny/robot
 git clone https://hilderonny@gitlab.com/hilderonny/robot/$REPO.git //gitlab/hilderonny/robot/$REPO
 chmod +x /gitlab/hilderonny/robot/$REPO/update.sh
 sh /gitlab/hilderonny/robot/$REPO/update.sh
+cd /gitlab/hilderonny/robot/$REPO/
+pip install flask
 
 echo "Setting up daemon ..."
 cat > /etc/systemd/system/pi3.service << EOM
