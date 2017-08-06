@@ -9,7 +9,7 @@ apt-get install git
 git config --global user.name "hilderonny"
 git config --global user.email "gitlab@hildebrandt2014.de"
 mkdir -p /gitlab/hilderonny/robot
-git clone https://hilderonny@gitlab.com/hilderonny/robot/$REPO.git //gitlab/hilderonny/robot/$REPO
+git clone https://hilderonny@gitlab.com/hilderonny/robot.git //gitlab/hilderonny/robot
 chmod +x /gitlab/hilderonny/robot/$REPO/update.sh
 sh /gitlab/hilderonny/robot/$REPO/update.sh
 
