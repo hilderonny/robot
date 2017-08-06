@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="my-texture" src="http://192.168.178.50:82/video_feed">
+        <video id="my-video" src="http://192.168.178.50:82/video_feed" autoplay="true">
+      </a-assets>
+      <a-sphere position="0 1.25 -5" radius="1.25" material="src: #my-video"></a-sphere>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+  </body>
+</html>
