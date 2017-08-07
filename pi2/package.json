@@ -1,0 +1,14 @@
+{
+  "name": "pi2",
+  "version": "1.0.0",
+  "description": "PI 2 with webcam streaming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "webcam-http-streaming": "^1.1.2"
+  }
+}
