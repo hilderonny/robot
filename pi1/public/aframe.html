@@ -1,16 +1,42 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+<script>
+  AFRAME.registerComponent('draw-canvas', {
+    schema: {default: ''},
+    init: function () {
+      this.canvas = document.getElementById(this.data);
+      this.ctx = this.canvas.getContext('2d');
+      this.img2 = document.getElementById('img2');
+      //this.img2.crossOrigin = "anonymous";
+      this.img3 = document.getElementById('img3');
+      //this.img2.src = 'http://' + location.host + ':82/video_feed';
+      //this.img3.src = 'http://' + location.host + ':83/video_feed';
+      var self = this;
+      window.setInterval(function() {
+        self.ctx.drawImage(self.img2, 0, 0);
+        //self.ctx.drawImage(self.img3, 640, 0);
+      },100);
+    }
+  });
+window.addEventListener('load', function() {
+  var url2 = 'http://' + location.host + ':82/video_feed';
+  document.getElementById('img2').src = url2; 
+  var url3 = 'http://' + location.host + ':83/video_feed';
+  document.getElementById('img3').src = url3;
+});
+
+</script>
   </head>
   <body>
     <a-scene>
       <a-assets>
-        <img id="my-texture" src="http://192.168.178.50:82/video_feed">
-        <video id="my-video" src="http://192.168.178.50:82/video_feed" autoplay="true">
+        <img id="img2" />
+        <img id="img3" />
+        <canvas id="my-canvas" crossorigin="anonymous" width="1280" height="480"></canvas>
       </a-assets>
-      <a-sphere position="0 1.25 -5" radius="1.25" material="src: #my-video"></a-sphere>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-sphere position="0 1.25 -5" radius="1.25" material="src: #my-canvas" draw-canvas="my-canvas"></a-sphere>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" material="src: #my-canvas" draw-canvas="my-canvas"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
     </a-scene>
   </body>
