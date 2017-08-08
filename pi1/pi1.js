@@ -31,6 +31,10 @@ app.get('/pi/:id', function(req, res) {
   proxy.web(req, res, { ignorePath: true, target: `http://10.0.0.${req.params.id}:80/video_feed` });
 });
 
+app.get('/pi1', function(req, res) {
+  proxy.web(req, res, { ignorePath: true, target: `http://10.0.0.1:81/video_feed` });
+});
+
 app.listen(80, function () {
   console.log('Läuft');
 });

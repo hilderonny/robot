@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script src="aframe.min.js"></script>
+<script>
+  AFRAME.registerComponent('draw-canvas', {
+    schema: {default: ''},
+    init: function () {
+      this.context = document.getElementById('canvas').getContext('2d');
+      this.img = document.getElementById('img');
+      var self = this;
+      window.setInterval(function() {
+        self.context.drawImage(self.img, 0, 0);
+      },100);
+    }
+  });
+</script>
+  </head>
+  <body>
+    <a-scene draw-canvas>
+      <a-assets>
+        <img id="img" src="/pi1" />
+        <canvas id="canvas" crossorigin="anonymous" width="640" height="480"></canvas>
+      </a-assets>
+      <a-entity camera look-controls position="0 0 0">
+        <a-plane position="0 0 -20" rotation="0 0 0" width="64" height="48" material="src: #canvas"></a-plane>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>

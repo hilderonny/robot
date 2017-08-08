@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="aframe-stereo-component.min.js"></script>
+<script>
+  AFRAME.registerComponent('draw-canvas', {
+    schema: {default: ''},
+    init: function () {
+      this.leftContext = document.getElementById('left-canvas').getContext('2d');
+      this.rightContext = document.getElementById('right-canvas').getContext('2d');
+      this.img2 = document.getElementById('img2');
+      this.img3 = document.getElementById('img3');
+      var self = this;
+      window.setInterval(function() {
+        self.leftContext.drawImage(self.img2, 0, 0);
+        self.rightContext.drawImage(self.img3, 0, 0);
+      },100);
+    }
+  });
+</script>
+  </head>
+  <body>
+    <a-scene draw-canvas>
+      <a-assets>
+        <img id="img2" src="/pi/2" />
+        <img id="img3" src="/pi/3" />
+        <canvas id="my-canvas" crossorigin="anonymous" width="1280" height="480"></canvas>
+        <canvas id="left-canvas" crossorigin="anonymous" width="640" height="480"></canvas>
+        <canvas id="right-canvas" crossorigin="anonymous" width="640" height="480"></canvas>
+      </a-assets>
+      <a-entity camera look-controls position="0 0 0" stereocam="eye:left;">
+        <a-plane position="0 0 -20" rotation="0 0 0" width="64" height="48" material="src: #left-canvas" stereo="eye:left"></a-plane>
+        <a-plane position="0 0 -20" rotation="0 0 0" width="64" height="48" material="src: #right-canvas" stereo="eye:right"></a-plane>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
