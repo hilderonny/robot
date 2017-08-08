@@ -16,7 +16,7 @@ def index():
 
 @app.route('/move/<int:port>/<int:value>')
 def move(port, value):
-    if port >= 0 and port < 16 and value >= 0 and value < 600:
+    if port >= 0 and port < 16 and value > 0 and value < 600:
         pwm.set_pwm(port, 0, value)
     return 'Port {0} Value {1}'.format(port, value)
 

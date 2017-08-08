@@ -31,6 +31,12 @@ def hand_locker():
     time.sleep(1)
     pwm.set_pwm(7, 0, 430)
     time.sleep(1)
+    pwm.set_pwm(2, 0, 0)
+    pwm.set_pwm(3, 0, 0)
+    pwm.set_pwm(4, 0, 0)
+    pwm.set_pwm(5, 0, 0)
+    pwm.set_pwm(6, 0, 0)
+    pwm.set_pwm(7, 0, 0)
 
 hand_auf()
 hand_locker()
