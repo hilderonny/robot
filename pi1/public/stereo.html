@@ -27,7 +27,7 @@
         if (rotY < -45) rotY = -45;
         if (rotY > 45) rotY = 45;
         var h = parseInt((-rotY + 45) / 90 * (maxH - minH) + minH);
-        var v = parseInt((-rotX + 45) / 90 * (maxV - minV) + minV);
+        var v = parseInt(maxV - (-rotX + 45) / 90 * (maxV - minV));
         console.log(rotX, v, rotY, h);
         $.get('/pi4/0/' + v);
         $.get('/pi4/1/' + h);
