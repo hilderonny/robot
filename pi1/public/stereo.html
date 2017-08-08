@@ -16,7 +16,7 @@
         self.leftContext.drawImage(self.img2, 0, 0);
         self.rightContext.drawImage(self.img3, 0, 0);
       },100);
-      var minH = 210, maxH = 470, minV = 0, maxV = 0;
+      var minH = 210, maxH = 470, minV = 240, maxV = 480;
       var camera = document.getElementById('camera');
       camera.addEventListener('componentchanged', function (evt) {
         if (evt.detail.name !== 'rotation') return;
@@ -27,7 +27,9 @@
         if (rotY < -45) rotY = -45;
         if (rotY > 45) rotY = 45;
         var h = parseInt((-rotY + 45) / 90 * (maxH - minH) + minH);
-        //console.log(rotY, h);
+        var v = parseInt((-rotX + 45) / 90 * (maxV - minV) + minV);
+        console.log(rotX, v, rotY, h);
+        $.get('/pi4/0/' + v);
         $.get('/pi4/1/' + h);
       });
     }
