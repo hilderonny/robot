@@ -1,9 +1,10 @@
 <html>
   <head>
-    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="jquery-3.2.1.min.js"></script>
+    <script src="aframe.min.js"></script>
     <script src="aframe-stereo-component.min.js"></script>
 <script>
-  AFRAME.registerComponent('draw-canvas', {
+  AFRAME.registerComponent('my-component', {
     schema: {default: ''},
     init: function () {
       this.leftContext = document.getElementById('left-canvas').getContext('2d');
@@ -15,12 +16,26 @@
         self.leftContext.drawImage(self.img2, 0, 0);
         self.rightContext.drawImage(self.img3, 0, 0);
       },100);
+      var minH = 210, maxH = 470, minV = 0, maxV = 0;
+      var camera = document.getElementById('camera');
+      camera.addEventListener('componentchanged', function (evt) {
+        if (evt.detail.name !== 'rotation') return;
+        var rotX = evt.detail.newData.x;
+        var rotY = evt.detail.newData.y;
+        if (rotX < -45) rotX = -45;
+        if (rotX > 45) rotX = 45;
+        if (rotY < -45) rotY = -45;
+        if (rotY > 45) rotY = 45;
+        var h = parseInt((-rotY + 45) / 90 * (maxH - minH) + minH);
+        //console.log(rotY, h);
+        $.get('/pi4/1/' + h);
+      });
     }
   });
 </script>
   </head>
   <body>
-    <a-scene draw-canvas>
+    <a-scene my-component>
       <a-assets>
         <img id="img2" src="/pi/2" />
         <img id="img3" src="/pi/3" />
@@ -28,7 +43,7 @@
         <canvas id="left-canvas" crossorigin="anonymous" width="640" height="480"></canvas>
         <canvas id="right-canvas" crossorigin="anonymous" width="640" height="480"></canvas>
       </a-assets>
-      <a-entity camera look-controls position="0 0 0" stereocam="eye:left;">
+      <a-entity camera id="camera" look-controls position="0 0 0" stereocam="eye:left;">
         <a-plane position="0 0 -20" rotation="0 0 0" width="64" height="48" material="src: #left-canvas" stereo="eye:left"></a-plane>
         <a-plane position="0 0 -20" rotation="0 0 0" width="64" height="48" material="src: #right-canvas" stereo="eye:right"></a-plane>
       </a-entity>

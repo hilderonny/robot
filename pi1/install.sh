@@ -12,11 +12,11 @@ cat > /etc/dnsmasq.conf << EOM
 domain-needed
 bogus-priv
 interface=eth0
-interface=wlan0
-no-dhcp-interface=wlan1
+interface=wlan1
+no-dhcp-interface=wlan0
 dhcp-option=3,10.0.0.1
 dhcp-range=interface:eth0,10.0.0.2,10.0.0.250,infinite
-dhcp-range=interface:wlan0,10.0.1.2,10.0.1.250,infinite
+dhcp-range=interface:wlan1,10.0.1.2,10.0.1.250,infinite
 EOM
 cat > /etc/network/interfaces << EOM
 auto lo
@@ -25,15 +25,15 @@ auto eth0
 iface eth0 inet static
     address 10.0.0.1
     netmask 255.0.0.0
-auto wlan0
-iface wlan0 inet static
+auto wlan1
+iface wlan1 inet static
     address 10.0.1.1
     netmask 255.0.0.0
-auto wlan1
-iface wlan1 inet dhcp
+auto wlan0
+iface wlan0 inet dhcp
     wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 up iptables -t nat -F
-up iptables -t nat -A POSTROUTING -o wlan1 -j MASQUERADE
+up iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
 up sysctl -w net.ipv4.ip_forward=1
 EOM
 /etc/init.d/networking restart
