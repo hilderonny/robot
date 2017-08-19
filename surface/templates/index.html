@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+<script>
+  AFRAME.registerComponent('draw-canvas', {
+    schema: {default: ''},
+    init: function () {
+      this.canvas = document.getElementById(this.data);
+      this.ctx = this.canvas.getContext('2d');
+      this.img = document.getElementById('bg');
+      var self = this;
+      window.setInterval(function() {
+        self.ctx.drawImage(self.img, 0, 0);
+      },100);
+    }
+  });
+</script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="bg" src="{{ url_for('video_feed') }}">
+        <canvas id="my-canvas" crossorigin="anonymous" width="1280" height="480"></canvas>
+      </a-assets>
+      <a-sphere position="0 1.25 -5" radius="1.25" material="src: #my-canvas" draw-canvas="my-canvas"></a-sphere>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" material="src: #my-canvas" draw-canvas="my-canvas"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+  </body>
+</html>

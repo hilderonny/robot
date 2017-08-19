@@ -1,0 +1,15 @@
+{
+  "name": "surface",
+  "version": "1.0.0",
+  "description": "Surface Pro 4 als zentrale Roboter-Steuereinheit, an der auch die Kameras und Arduinos angeschlossen sind.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.org/hilderonny/robot.git"
+  },
+  "author": "Ronny Hildebrandt",
+  "license": "ISC"
+}
