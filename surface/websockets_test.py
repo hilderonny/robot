@@ -12,7 +12,6 @@ pip install flask-socketio
 pip install eventlet
 '''
 from flask import Flask, render_template
-import logging
 from flask_socketio import SocketIO
 
 # Webserver liefert html-Datei aus templates-Verzeichnis

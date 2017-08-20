@@ -1,40 +1,66 @@
+# -*- coding: iso-8859-1 -*-
+'''
+Zwei Webcams über Websockets streamen
+https://gist.github.com/companje/b95e735650f1cd2e2a41
+pip install flask
+pip install flask-socketio
+pip install eventlet
+'''
+from multiprocessing import Process, Pipe
+import numpy as np
 import cv2
-from flask import Flask, render_template, Response
+from flask import Flask, render_template
+from flask_socketio import SocketIO, send, emit
 
-class VideoCamera(object):
-    def __init__(self):
-        self.video = cv2.VideoCapture(-1)
-        self.video.set(3,640)
-        self.video.set(4,480)
-    
-    def __del__(self):
-        self.video.release()
-    
-    def get_frame(self):
-        success, image = self.video.read()
-        ret, jpeg = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 25])
-        return jpeg.tostring()
+mainConnection, workerConnection = Pipe()
+def WorkerFunction(connection):
+    cap1 = cv2.VideoCapture(0)
+    cap2 = cv2.VideoCapture(1)
+    frame = False
+    quality = 75
+    while(True):
+        if (connection.poll()):
+            message = connection.recv()
+            if message['type'] == 'frame':
+                connection.send(frame)
+            if message['type'] == 'quality':
+                quality = int(message['value'])
+        cap1.grab()
+        cap2.grab()
+        ret1, raw1 = cap1.retrieve()
+        ret2, raw2 = cap2.retrieve()
+
+        beside = np.concatenate((raw1, raw2), axis=1)
+
+        cv2.putText(beside, "Quality: %s" % (quality), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+
+        ret, arr = cv2.imencode('.jpg', beside, [cv2.IMWRITE_JPEG_QUALITY, quality])
+        frame = bytes(bytearray(arr))
+        cv2.waitKey(1)
+
 
 app = Flask(__name__)
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('stereoserver.html')
 
-@app.route('/test/')
-def test():
-    return render_template('test.html')
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+socketio = SocketIO(app, binary=True)
+@socketio.on('getimage')
+def ws_getimage():
+    global mainConnection
+    mainConnection.send({'type': 'frame'})
+    frame = mainConnection.recv()
+    emit(u"image", frame)
+@socketio.on('setquality')
+def ws_setquality(q):
+    print "Setting quality to %s" % q
+    mainConnection.send({'type': 'quality', 'value':q})
+    socketio.emit(u"quality", q)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True,port=81)
+    # Webcam
+    workerProcess = Process(target=WorkerFunction, args=(workerConnection, ))
+    workerProcess.start()
+    # Server
+    socketio.run(app, host = '0.0.0.0', port = 80)
