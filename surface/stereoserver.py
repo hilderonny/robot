@@ -14,6 +14,7 @@ from flask_socketio import SocketIO, send, emit
 
 mainConnection, workerConnection = Pipe()
 def WorkerFunction(connection):
+    brightness = 75
     cap1 = cv2.VideoCapture(0)
     cap2 = cv2.VideoCapture(1)
     frame = False
@@ -25,6 +26,10 @@ def WorkerFunction(connection):
                 connection.send(frame)
             if message['type'] == 'quality':
                 quality = int(message['value'])
+            if message['type'] == 'brightness':
+                brightness = float(message['value'])
+                cap1.set(cv2.cv.CV_CAP_PROP_BRIGHTNESS, brightness)
+                cap2.set(cv2.cv.CV_CAP_PROP_BRIGHTNESS, brightness)
         cap1.grab()
         cap2.grab()
         ret1, raw1 = cap1.retrieve()
@@ -32,7 +37,7 @@ def WorkerFunction(connection):
 
         beside = np.concatenate((raw1, raw2), axis=1)
 
-        cv2.putText(beside, "Quality: %s" % (quality), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+        cv2.putText(beside, "Quality: %s Brightness: %s" % (quality, brightness), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
 
         ret, arr = cv2.imencode('.jpg', beside, [cv2.IMWRITE_JPEG_QUALITY, quality])
         frame = bytes(bytearray(arr))
@@ -57,6 +62,11 @@ def ws_setquality(q):
     print "Setting quality to %s" % q
     mainConnection.send({'type': 'quality', 'value':q})
     socketio.emit(u"quality", q)
+@socketio.on('setbrightness')
+def ws_setbrightness(v):
+    print "Setting brightness to %s" % v
+    mainConnection.send({'type': 'brightness', 'value':v})
+    socketio.emit(u"brightness", v)
 
 if __name__ == '__main__':
     # Webcam

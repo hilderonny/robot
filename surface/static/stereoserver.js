@@ -3,7 +3,10 @@ function b64(e){var t="";var n=new Uint8Array(e);var r=n.byteLength;for(var i=0;
 window.addEventListener('load', function() {
     var img = document.getElementById('img');
     var quality = document.getElementById('quality');
-
+    var qualityValue = document.getElementById('qualityValue');
+    var brightness = document.getElementById('brightness');
+    var brightnessValue = document.getElementById('brightnessValue');
+    
     var socket = io.connect();
 
     function request() {
@@ -15,12 +18,22 @@ window.addEventListener('load', function() {
         window.setTimeout(request, 0);
     });
 
-    socket.on('quality', function(q) {
-        quality.value = q;
+    socket.on('quality', function(v) {
+        quality.value = v;
+        qualityValue.innerText = v;
+    });
+
+    socket.on('brightness', function(v) {
+        brightness.value = v;
+        brightnessValue.innerText = v;
     });
 
     quality.addEventListener('change', function() {
         socket.emit('setquality', quality.value);
+    });
+
+    brightness.addEventListener('change', function() {
+        socket.emit('setbrightness', brightness.value);
     });
 
     window.setTimeout(request, 0);
