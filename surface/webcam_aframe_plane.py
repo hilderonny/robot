@@ -54,7 +54,7 @@ def WorkerFunction(connection):
 app = Flask(__name__)
 @app.route('/')
 def index():
-    return render_template('webcam_aframe_plane.html')
+    return app.send_static_file('webcam_aframe_plane.html')
 
 
 socketio = SocketIO(app, binary=True)
