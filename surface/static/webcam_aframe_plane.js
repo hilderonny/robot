@@ -2,12 +2,14 @@ function b64(e){var t="";var n=new Uint8Array(e);var r=n.byteLength;for(var i=0;
 
 window.addEventListener('load', function() {
     
-    var ctx = document.getElementById('canvas').getContext('2d');
+    var context1 = document.getElementById('canvas1').getContext('2d');
+    var context2 = document.getElementById('canvas2').getContext('2d');
     var socket = io.connect();
     var img = new Image();
 
     img.onload = function() {
-        ctx.drawImage(img, 0, 0);
+        context1.drawImage(img, 0, 0, 640, 480, 0, 6, 640, 480);
+        context2.drawImage(img, 640, 0, 640, 480, 0, -6, 640, 480);
     };
 
     function request() {

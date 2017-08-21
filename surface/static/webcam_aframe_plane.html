@@ -1,21 +1,22 @@
 <html>
-    <head>
-        <script src="static/socket.io.min.js"></script>
-        <script src="static/aframe.min.js"></script>
-        <script src="static/webcam_aframe_plane.js"></script>
-    </head>
-    <body>
-      <a-scene>
-        <a-assets>
-          <canvas id="canvas" width="1280" height="480"></canvas>
-        </a-assets>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" material="src: #canvas"></a-plane>
-        <a-plane position="0 2 -6" rotation="0 0 0" width="4" height="4" material="src: #canvas"></a-plane>
-        <a-plane position="0 4 -4" rotation="90 0 0" width="4" height="4" material="src: #canvas"></a-plane>
-        <a-plane position="-2 2 -4" rotation="0 90 0" width="4" height="4" material="src: #canvas"></a-plane>
-        <a-plane position="2 2 -4" rotation="0 -90 0" width="4" height="4" material="src: #canvas"></a-plane>
-        <a-sky color="#ECECEC"></a-sky>
-      </a-scene>
-    </body>
-  </html>
+  
+  <head>
+      <script src="static/socket.io.min.js"></script>
+      <script src="static/aframe.min.js"></script>
+      <script src="static/webcam_aframe_plane.js"></script>
+      <script src="static/aframe-stereo-component.min.js"></script><!--https://github.com/oscarmarinmiro/aframe-stereo-component -->
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <canvas id="canvas1" width="640" height="480"></canvas>
+        <canvas id="canvas2" width="640" height="480"></canvas>
+      </a-assets>
+      <a-camera position="0 0 0" cursor-visible="false">
+        <a-plane position="0 0 -4" rotation="0 0 0" width="10" height="10" material="src: #canvas1" stereo="eye:left;"></a-plane>
+        <a-plane position="0 0 -4" rotation="0 0 0" width="10" height="10" material="src: #canvas2" stereo="eye:right;"></a-plane>
+      </a-camera>
+    </a-scene>
+  </body>
+</html>
   
