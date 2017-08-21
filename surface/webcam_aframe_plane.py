@@ -17,10 +17,6 @@ def initCamera(cap):
     # Konstanten siehe http://docs.opencv.org/2.4/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
     cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 480)
-    cap.set(cv2.cv.CV_CAP_PROP_CONTRAST, 75)
-    cap.set(cv2.cv.CV_CAP_PROP_BRIGHTNESS, 75)
-    cap.set(cv2.cv.CV_CAP_PROP_SATURATION, 75)
-    cap.set(cv2.cv.CV_CAP_PROP_GAIN, 75)
 
 mainConnection, workerConnection = Pipe()
 def WorkerFunction(connection):
