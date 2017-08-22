@@ -25,7 +25,7 @@ def WorkerFunction(connection):
     initCamera(cap1)
     initCamera(cap2)
     frame = False
-    quality = 75
+    quality = 50
     while(True):
         if (connection.poll()):
             message = connection.recv()
