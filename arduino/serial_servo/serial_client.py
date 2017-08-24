@@ -18,8 +18,11 @@ baudRate = 9600
 serialConnection = serial.Serial(serialPort, baudRate, timeout=1)
 time.sleep(2) # Auf Auto-Reset warten (https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection)
 serialConnection.write(chr(70))
+print "70"
 time.sleep(2)
 serialConnection.write(chr(110))
+print "110"
 time.sleep(2)
 serialConnection.write(chr(90))
+print "90"
 serialConnection.close()
