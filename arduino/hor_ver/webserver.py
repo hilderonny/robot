@@ -26,9 +26,16 @@ def WorkerFunction(connection):
     while(True):
         if (connection.poll()):
             message = connection.recv()
-            print message
             horiz = int(message['horiz'])
             vert = int(message['vert'])
+            if horiz < 70:
+                horiz = 70
+            if horiz > 110:
+                horiz = 110
+            if vert < 30:
+                vert = 30
+            if vert > 150:
+                vert = 150
             serialConnection.write(bytearray([8, horiz]))
             serialConnection.write(bytearray([9, vert]))
 
