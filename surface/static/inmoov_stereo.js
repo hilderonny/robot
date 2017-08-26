@@ -13,7 +13,6 @@ window.addEventListener('load', function() {
     };
 
     document.getElementById('camera').addEventListener('componentchanged', function (evt) {
-        console.log(evt);
         if (evt.detail.name !== 'rotation') { return; }
         var x = Math.round(evt.detail.newData.x) + 90;
         var y = Math.round(evt.detail.newData.y) + 90;

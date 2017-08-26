@@ -81,13 +81,11 @@ def ws_getimage():
     emit(u"image", frame)
 @socketio.on('setquality')
 def ws_setquality(q):
-    print "Setting quality to %s" % q
     mainConnection.send({'type': 'quality', 'value':q})
     socketio.emit(u"quality", q)
 @socketio.on('move')
 def ws_move(requestObject):
     global mainConnection
-    print requestObject
     mainConnection.send({'type': 'move', 'horiz':requestObject['horiz'], 'vert':requestObject['vert']})
 
 if __name__ == '__main__':
