@@ -1,30 +1,34 @@
 # -*- coding: iso-8859-1 -*-
 '''
-Zwei Webcams über Websockets streamen und in AFRAME
-Fläche anzeigen
-https://gist.github.com/companje/b95e735650f1cd2e2a41
+Erster Test, der die Kameras vom InMoov an AFRAME
+überträgt und rückwärts die Servos steuert.
 pip install flask
 pip install flask-socketio
 pip install eventlet
 pip install numpy
+pip install pyserial
 '''
 from multiprocessing import Process, Pipe
 import numpy as np
 import cv2
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
-
-def initCamera(cap):
-    # Konstanten siehe http://docs.opencv.org/2.4/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
-    cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320)
-    cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+import serial
+import time
 
 mainConnection, workerConnection = Pipe()
 def WorkerFunction(connection):
+    # Arduino
+    serialPort = 'COM4'
+    baudRate = 115200
+    horiz = 90
+    vert = 90
+    serialConnection = serial.Serial(serialPort, baudRate, timeout=.1)
+    time.sleep(2) # Auf Auto-Reset warten (https://playground.arduino.cc/Main/DisablingAutoResetOnSerialConnection)
+
+    # Kameras
     cap1 = cv2.VideoCapture(2)
     cap2 = cv2.VideoCapture(3)
-    #initCamera(cap1)
-    #initCamera(cap2)
     frame = False
     quality = 50
     while(True):
@@ -34,6 +38,20 @@ def WorkerFunction(connection):
                 connection.send(frame)
             if message['type'] == 'quality':
                 quality = int(message['value'])
+            if message['type'] == 'move':
+                horiz = int(message['horiz'])
+                vert = int(message['vert'])
+                if horiz < 70:
+                    horiz = 70
+                if horiz > 110:
+                    horiz = 110
+                if vert < 30:
+                    vert = 30
+                if vert > 150:
+                    vert = 150
+                serialConnection.write(bytearray([8, horiz]))
+                serialConnection.write(bytearray([9, vert]))
+                continue
         cap1.grab()
         cap2.grab()
         ret1, raw1 = cap1.retrieve()
@@ -51,7 +69,7 @@ def WorkerFunction(connection):
 app = Flask(__name__)
 @app.route('/')
 def index():
-    return app.send_static_file('webcam_aframe_plane.html')
+    return app.send_static_file('inmoov_stereo.html')
 
 
 socketio = SocketIO(app, binary=True)
@@ -66,6 +84,11 @@ def ws_setquality(q):
     print "Setting quality to %s" % q
     mainConnection.send({'type': 'quality', 'value':q})
     socketio.emit(u"quality", q)
+@socketio.on('move')
+def ws_move(requestObject):
+    global mainConnection
+    print requestObject
+    mainConnection.send({'type': 'move', 'horiz':requestObject['horiz'], 'vert':requestObject['vert']})
 
 if __name__ == '__main__':
     # Webcam

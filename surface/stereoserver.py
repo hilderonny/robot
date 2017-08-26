@@ -15,8 +15,8 @@ from flask_socketio import SocketIO, send, emit
 mainConnection, workerConnection = Pipe()
 def WorkerFunction(connection):
     brightness = 75
-    cap1 = cv2.VideoCapture(0)
-    cap2 = cv2.VideoCapture(1)
+    cap1 = cv2.VideoCapture(2)
+    cap2 = cv2.VideoCapture(3)
     frame = False
     quality = 75
     while(True):
