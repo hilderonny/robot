@@ -6,8 +6,8 @@ Sinnvoll für die LifeCam 3000.
 import numpy as np
 import cv2
 
-cap1 = cv2.VideoCapture(0)
-cap2 = cv2.VideoCapture(1)
+cap1 = cv2.VideoCapture(2)
+cap2 = cv2.VideoCapture(3)
 
 ticks = cv2.getTickCount()
 freq = cv2.getTickFrequency()
