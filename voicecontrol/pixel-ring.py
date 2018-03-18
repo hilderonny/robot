@@ -14,11 +14,11 @@ if __name__ == '__main__':
 
         try:
             pixel_ring.wakeup()
-            time.sleep(3)
+            time.sleep(1)
             pixel_ring.think()
             time.sleep(3)
             pixel_ring.speak()
-            time.sleep(6)
+            time.sleep(3)
             pixel_ring.off()
             time.sleep(3)
         except KeyboardInterrupt:
