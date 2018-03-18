@@ -4,36 +4,59 @@ Hierfür verwende ich das ReSpeaker 4-Mic Array von SeedStudio.
 
 http://www.seeed.cc, BN paypal@hildebrandt2014.d, PW 76048645247
 
-Als erstes brauchen wir PyUSB auf dem PI:
+## Mikrofon einrichten und Richtung erkennen
 
-```pip install pyusb```
+```
+apt-get install git mc python-pip python-pyaudio python-numpy
 
-Danach diese beiden Repositories auf den PI laden:
-
-https://github.com/respeaker/seeed-voicecard
-https://github.com/respeaker/mic_array
-https://github.com/respeaker/pixel_ring
-https://github.com/respeaker/4mics_hat
-
-Im ersten Verzeichnis ```./install.sh 4mic``` aufrufen, das installiert die Treiber. Danach PI neu starten.
-
-
-apt-get install alsa-utils
-apt-get install screen
-apt-get install espeak
-apt-get install libttspico-utils
-apt-get install python python-pip python-usb
-echo "snd_bcm2835" > /etc/modules
-
-espeak "Hello world"
-
-- raspi-config: SSH Server aktivieren, Audio über Klinke ausgeben lassen, SPI aktivieren
-
-apt-get install libportaudio0 libportaudio2 libportaudiocpp0 portaudio19-dev python-dev
-pip install pyaudio gpiozero numpy pixel_ring google-assistant-library
-
-
-BRANCH=next rpi-update (https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=44044&start=425#p919426), damit SSH über eingebautes WIFI geht
-
-apt-get install git mc python-pip
 pip install pixel-ring gpiozero
+
+git clone https://github.com/respeaker/seeed-voicecard
+
+./seeed-voicecard/install.sh
+
+python ./mic_direction.py
+```
+
+## Spracherkennung mit PocketSphinx
+
+https://github.com/slowrunner/Pi3RoadTest
+
+https://howchoo.com/g/ztbhyzfknze/how-to-install-pocketsphinx-on-a-raspberry-pi
+
+https://cmusphinx.github.io/wiki/raspberrypi/
+
+https://cmusphinx.github.io/wiki/tutorialam/
+
+```
+wget https://sourceforge.net/projects/cmusphinx/files/sphinxbase/5prealpha/sphinxbase-5prealpha.tar.gz/download -O sphinxbase.tar.gz
+
+wget https://sourceforge.net/projects/cmusphinx/files/pocketsphinx/5prealpha/pocketsphinx-5prealpha.tar.gz/download -O pocketsphinx.tar.gz
+
+tar -xzvf sphinxbase.tar.gz
+
+tar -xzvf pocketsphinx.tar.gz
+
+apt-get install bison libasound2-dev swig
+
+cd sphinxbase-5prealpha
+./configure --enable-fixed
+make && make install
+
+cd ../pocketsphinx-5prealpha
+./configure
+make && make install
+
+export LD_LIBRARY_PATH=/usr/local/lib 
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+```
+
+Die Python-Bibliotheken werden danach nach ```/usr/local/lib/python2.7/dist-packages/ (sphinxbase,pocketsphinx)``` installiert.
+
+Mit ```cat /proc/asound/cards``` lässt sich heraus finden, welche Nummer das Mikrofon hat. Sollte etwa so aussehen: ```1 [seeed4micvoicec] ...```.
+
+
+## Oder mit Jasper
+
+http://jasperproject.github.io/documentation/installation/
+
