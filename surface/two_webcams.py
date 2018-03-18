@@ -6,8 +6,14 @@ Sinnvoll für die LifeCam 3000.
 import numpy as np
 import cv2
 
-cap1 = cv2.VideoCapture(2)
-cap2 = cv2.VideoCapture(3)
+cap1 = cv2.VideoCapture(0)
+cap2 = cv2.VideoCapture(1)
+
+cap1.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320)
+cap2.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 320)
+cap1.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+cap2.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 240)
+
 
 ticks = cv2.getTickCount()
 freq = cv2.getTickFrequency()
@@ -18,17 +24,20 @@ while(True):
     ret1, frame1 = cap1.retrieve()
     ret2, frame2 = cap2.retrieve()
 
-    beside = np.concatenate((frame1, frame2), axis=1)
+    try:
+        beside = np.concatenate((frame1, frame2), axis=1)
 
-    now = cv2.getTickCount()
-    diff = now - ticks
-    fps = freq / diff
+        now = cv2.getTickCount()
+        diff = now - ticks
+        fps = freq / diff
 
-    cv2.putText(beside, "%s" % (fps), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+        cv2.putText(beside, "%s" % (fps), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
 
-    ticks = now
+        ticks = now
 
-    cv2.imshow('beside', beside)
+        cv2.imshow('beside', beside)
+    except:
+        pass
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     ticks = cv2.getTickCount()
