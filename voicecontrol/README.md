@@ -35,4 +35,5 @@ pip install pyaudio gpiozero numpy pixel_ring google-assistant-library
 
 BRANCH=next rpi-update (https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=44044&start=425#p919426), damit SSH über eingebautes WIFI geht
 
-
+apt-get install git mc python-pip
+pip install pixel-ring gpiozero
