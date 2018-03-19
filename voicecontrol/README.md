@@ -106,3 +106,19 @@ Für deutsche Erkennung muss die Datei de-DE.tar.gz nach ```/usr/local/lib/pytho
 Mit dem Text "Sag mal warum dauert das so lange." sieht man bei ```python microphone_recognition.py```, dass Sphinx sehr ungenau ist, Google und Bing korrekt antworten und Bing sowohl Großschreibung korrekt macht, als auch konstant zügig antwortet.
 
 Bei noch längeren Sätzen braucht Sphinx eine halbe Ewigkeit. Die erhöhte Dauer bei den Onlinediensten ist wohl auf die Übertragung der WAV-Datei zurück zu führen. Google dauert zwar länger als Bing, scheint dabei aber exaktere Ergebnisse zu liefern, trotz der fehlenden Großschreibung.
+
+# Sprachausgabe
+
+Für schönere Stimmen können MBROLA-Stimmen verwendet werden. Allerdings ist dazu der Hack unten notwendig, da MBROLA auf dem Raspberry nicht verfügbar ist.
+
+```
+wget http://steinerdatenbank.de/software/mbrola3.0.1h_armhf.deb (bzw. einfach aus diesem Verzeichnis nehmen)
+dpkg -i mbrola3.0.1h_armhf.deb
+apt-get install espeak python-espeak mbrola-de6 mbrola-de7 mbrola-de4 mbrola-de5
+
+espeak -v mb-de5 "Ich habe eine wunderschöne Stimme."
+```
+
+mb-de5 ist eine gute weibliche und mb-de6 eine gute männliche Stimme.
+
+Zur Verwendung in Python nehme ich os.system und rufe espeak direkt auf. Das scheint mir am einfachsten (hear_and_speak.py).
