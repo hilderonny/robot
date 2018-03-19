@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Einfache Sprache-zu-Text-Anwendung, die auf Knopfdruck lokal (ohne Internetverbindung)
@@ -33,6 +35,12 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     private ToggleButton toggleButton;
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
+    private TextToSpeech tts;
+
+    private void speak(String text) {
+        returnedText.setText(text);
+        if (tts != null) tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,15 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             }
         });
 
+        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR){
+                    tts.setLanguage(Locale.GERMAN);
+                    speak("Sprachausgabe bereit.");
+                }
+            }
+        });
     }
 
     @Override
@@ -89,9 +106,10 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     @Override
     public void onResults(Bundle results) {
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        StringBuilder sb = new StringBuilder();
-        if (matches != null) for (String result : matches) sb.append(result).append("\n");
-        returnedText.setText(sb.toString());
+        if (matches != null && matches.size() > 0) {
+            String text = matches.get(0);
+            speak(text);
+        }
     }
 
     @Override public void onBeginningOfSpeech() { }
