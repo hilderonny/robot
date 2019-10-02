@@ -19,3 +19,4 @@ Unterverzeichnis initialisiert. Das wird mit `install.sh` gemacht:
 |pi2|Linkes Auge|
 |pi3|Rechtes Auge|
 |pi4|Kopfmechanik|
+|laptop|Das wird die Hauptsteuereinheit mit einem leistungsfähigen Laptop. Der soll die Kameras streamen und die anderen Himbeeren koordinieren.|

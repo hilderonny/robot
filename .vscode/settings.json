@@ -1,3 +1,11 @@
 {
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "files.associations": {
+        "gst.h": "c",
+        "glib.h": "c",
+        "gasyncqueue.h": "c",
+        "garray.h": "c",
+        "galloca.h": "c",
+        "gtypes.h": "c"
+    }
 }
