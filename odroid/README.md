@@ -40,6 +40,9 @@ Hier ist eventuell ein guter Ansatz: https://gist.github.com/tetkuz/0c038321d055
 gst-launch-1.0 v4l2src device=/dev/video0 ! videoconvert ! videoscale ! video/x-raw,width=320,height=240 ! clockoverlay shaded-background=true font-desc="Sans 38" ! theoraenc ! oggmux ! tcpserversink host=0.0.0.0 port=8080
 ```
 
+Okay, in Firefox geht der Aufruf von https://192.168.178.53/video.html. In Chrome geht das aus irgendweinem Grunde nicht, siehe https://webmasters.stackexchange.com/questions/108292/why-is-chrome-not-allowing-resources-to-load .
+Ich werde wohl über korrektes WebRTC nicht herum kommen. Möglicherweise am Einfachsten, wenn ich auf dem odroid Chrome headless laufen lasse.
+
 
 
 
