@@ -40,5 +40,5 @@ app.get('/pi4/:port/:value', function(req, res) {
 });
 
 app.listen(80, function () {
-  console.log('Läuft');
+  console.log('Running');
 });

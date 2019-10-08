@@ -13,10 +13,8 @@ Unterverzeichnis initialisiert. Das wird mit `install.sh` gemacht:
 
 # Aufgaben der einzelnen Himbeeren
 
-|Knoten|Aufgabe|
-|---|---|
-|pi1|Zentraler Kommunikationsknoten mit Access Point, DHCP-Server, DNS, Router, Webserver|
-|pi2|Linkes Auge|
-|pi3|Rechtes Auge|
-|pi4|Kopfmechanik|
-|laptop|Das wird die Hauptsteuereinheit mit einem leistungsfähigen Laptop. Der soll die Kameras streamen und die anderen Himbeeren koordinieren.|
+|Knoten|IP extern|IP intern|Aufgabe|
+|---|---|---|---|
+|odroid|192.168.178.44|10.0.0.2|Kameras streamen, Mikrofon, Lautsprecher|
+|pi1|192.168.178.53|10.0.0.1|Gateway WLAN internes LAN, Webserver, Display|
+|pi2|-|10.0.0.3|Kopf- und Armsteuerung|
