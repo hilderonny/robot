@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="refresh" content="5;">
+    <style>
+html, body { margin:0; padding: 0; width: 100%; height: 100% }
+* { box-sizing: border-box; }
+
+body {
+  position:absolute;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 480px;
+  border: 2px solid red;
+}
+    </style>
+    <script>
+var version = 4;
+
+window.addEventListener('load', function() {
+  var info = {
+    version: version,
+    'screen.width': window.screen.width,
+    'screen.height': window.screen.height,
+    reload: 'Every 5 seconds'
+  };
+  document.body.innerHTML = '<pre>' + JSON.stringify(info, null, 2) + '</pre>';
+});
+    </script>
+  </head>  
+  <body>
+    Lade ...
+  </body>
+</html>
