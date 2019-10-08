@@ -21,7 +21,24 @@ iface eth0 inet static
  dns-nameservers 10.0.0.1
 ```
 
+## 2. gstreamer installieren
 
+```
+apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+
+mkdir /gitlab
+mkdir /gitlab/gstreamer
+cd /gitlab/gstreamer
+git clone https://gitlab.freedesktop.org/gstreamer/gst-docs.git
+```
+
+Beim Kompilieren der Beispiele immer `pkg-config --cflags --libs gstreamer-1.0` mit angeben. Siehe [hier](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html?gi-language=c).
+
+Hier ist eventuell ein guter Ansatz: https://gist.github.com/tetkuz/0c038321d05586841897
+
+``` 
+gst-launch-1.0 v4l2src device=/dev/video0 ! videoconvert ! videoscale ! video/x-raw,width=320,height=240 ! clockoverlay shaded-background=true font-desc="Sans 38" ! theoraenc ! oggmux ! tcpserversink host=0.0.0.0 port=8080
+```
 
 
 

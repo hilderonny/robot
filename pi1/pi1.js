@@ -57,6 +57,12 @@ app.get('/pi4/:port/:value', function(req, res) {
   proxy.web(req, res, { ignorePath: true, target: `http://10.0.0.4/move/${req.params.port}/${req.params.value}` });
 });
 
+
+app.get('/odroid/video0', function(req, res) {
+  proxy.web(req, res, { ignorePath: true, target: `http://10.0.0.2:8080` });
+});
+
+
 app.listen(80, function () {
   console.log('Running');
 });
