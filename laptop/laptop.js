@@ -1,12 +1,20 @@
 var express = require('express');
 var https = require('https');
 var fs = require('fs');
-var app = express();
+var webrtc = require('./webrtc');
 
+// Express application
+var app = express();
+app.use(express.static(__dirname + '/public'));
+
+// HTTPS server
 var options = {
   key: fs.readFileSync('ssl.key'),
   cert: fs.readFileSync('ssl.crt')
 };
-https.createServer(options, app).listen(443);
+var server = https.createServer(options, app).listen(443, function() {
+  console.log('Running.');
+});
 
-app.use(express.static(__dirname + '/public'));
+// WebRTC server
+webrtc(server);

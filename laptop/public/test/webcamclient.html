@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Client</title>
+        <script src="../webrtc.js"></script>
+        <script>
+
+            var buttons = {};
+
+            WebRTC.addEventListener('socketconnected', function(event) {
+                var socketid = event.detail;
+                var button = document.createElement('button');
+                button.innerHTML = socketid;
+                button.addEventListener('click', function() {
+                    WebRTC.call(socketid);
+                });
+                document.body.appendChild(button);
+                buttons[socketid] = button;
+            });
+
+            WebRTC.addEventListener('socketdisconnected', function(event) {
+                var socketid = event.detail;
+                var button = buttons[socketid];
+                delete buttons[socketid];
+                button.parentNode.removeChild(button);
+            });
+
+            WebRTC.addEventListener('remotestream', function(event) {
+                var stream = event.detail;
+                var video = document.createElement('video');
+                video.autoplay = 'autoplay';
+                video.srcObject = stream;
+                document.body.appendChild(video);
+            });
+
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>
