@@ -3,7 +3,7 @@ var knownsocketidscript  = document.createElement('script');
 knownsocketidscript.src = '/socket.io/socket.io.js';
 document.head.appendChild(knownsocketidscript);
 
-// events: socketconnected, socketdisconnected, deviceslisted, remotestream
+// events: socketconnected, socketdisconnected, deviceslisted, remotestream, remotedevicelist
 var WebRTC = new EventTarget();
 
 window.addEventListener('load', function() {
@@ -18,10 +18,44 @@ window.addEventListener('load', function() {
     var audioDevices = [];
     var videoDevices = [];
 
-    WebRTC.call = async function(targetsocketid) {
-        console.log('WebRTC Calling ' + targetsocketid + ' ...');
+    async function addLocalDevicesToConnection(connection, deviceIdOnly) {
+        for (var i = 0; i < videoDevices.length; i++) {
+            var videoDevice = videoDevices[i];
+            if (deviceIdOnly && videoDevice.deviceId !== deviceIdOnly) continue;
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ video: { 
+                    deviceId: videoDevice.deviceId,
+                    //width: 320,
+                    //height: 240
+                 } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+        for (var i = 0; i < audioDevices.length; i++) {
+            var audioDevice = audioDevices[i];
+            if (deviceIdOnly && audioDevice.deviceId !== deviceIdOnly) continue;
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevice.deviceId } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+    }
+
+    WebRTC.connect = async function(targetsocketid, targetdeviceid) {
+        console.log('WebRTC Connecting ' + targetsocketid + ' / ' + targetdeviceid + '...');
         var connection = new RTCPeerConnection(null);
-        var connectionId = ownsocket.id + Date.now();
+        connection.targetdeviceid = targetdeviceid;
+        var connectionId = ownsocket.id + targetdeviceid + Date.now();
         connections[connectionId] = connection;
 
         connection.onicecandidate = function(event) {
@@ -39,29 +73,7 @@ window.addEventListener('load', function() {
             WebRTC.dispatchEvent(new CustomEvent('remotestream', { detail: stream }));
         };
 
-        for (var i = 0; i < videoDevices.length; i++) {
-            try {
-                var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
-                var tracks = stream.getTracks();
-                for (var j = 0; j < tracks.length; j++) {
-                    connection.addTrack(tracks[j], stream);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
-
-        for (var i = 0; i < audioDevices.length; i++) {
-            try {
-                var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
-                var tracks = stream.getTracks();
-                for (var j = 0; j < tracks.length; j++) {
-                    connection.addTrack(tracks[j], stream);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
+        await addLocalDevicesToConnection(connection);
 
         // Damit onicecandidate funktioniert, hier eine Anpassung: https://stackoverflow.com/a/27758788
         // Damit kann man Offers machen, auch wenn man keinen lokalen Stream bereit stellt
@@ -71,8 +83,9 @@ window.addEventListener('load', function() {
         });
         connection.setLocalDescription(localSessionDescription);
         ownsocket.emit('webrtcmessage', { 
-            type: 'call', 
+            type: 'connect', 
             targetsocketid: targetsocketid,
+            deviceId: targetdeviceid,
             connectionId: connectionId,
             sessionDescription: localSessionDescription
         });
@@ -83,6 +96,13 @@ window.addEventListener('load', function() {
         console.log('WebRTC Socket ID ' + socketid + ' added to known socket ids');
         knownsocketids[socketid] = {};
         WebRTC.dispatchEvent(new CustomEvent('socketconnected', { detail: socketid }));
+        // Infos über verfügbare Geräte senden
+        ownsocket.emit('webrtcmessage', { 
+            type: 'devicelist', 
+            targetsocketid: socketid,
+            audioDevices: audioDevices,
+            videoDevices: videoDevices            
+        });
     }
 
     function handleSocketDisconnect(socketid) {
@@ -91,8 +111,8 @@ window.addEventListener('load', function() {
         WebRTC.dispatchEvent(new CustomEvent('socketdisconnected', { detail: socketid }));
     }
 
-    async function handleIncomingCall(sourcesocketid, remoteConnectionId, remoteSessionDescription) {
-        console.log('WebRTC Call incoming from: ', sourcesocketid);
+    async function handleIncomingConnection(sourcesocketid, deviceId, remoteConnectionId, remoteSessionDescription) {
+        console.log('WebRTC Connection incoming from: ', sourcesocketid);
         var connection = new RTCPeerConnection(null);
         connection.setRemoteDescription(new RTCSessionDescription(remoteSessionDescription));
         connections[remoteConnectionId] = connection;
@@ -107,44 +127,22 @@ window.addEventListener('load', function() {
             });
         };
 
-        for (var i = 0; i < videoDevices.length; i++) {
-            try {
-                var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
-                var tracks = stream.getTracks();
-                for (var j = 0; j < tracks.length; j++) {
-                    connection.addTrack(tracks[j], stream);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
-
-        for (var i = 0; i < audioDevices.length; i++) {
-            try {
-                var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
-                var tracks = stream.getTracks();
-                for (var j = 0; j < tracks.length; j++) {
-                    connection.addTrack(tracks[j], stream);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
+        await addLocalDevicesToConnection(connection, deviceId);
 
         var localSessionDescription = await connection.createAnswer();
         connection.setLocalDescription(localSessionDescription);
         var data = { 
-            type: 'acceptcall', 
+            type: 'acceptconnection', 
             targetsocketid: sourcesocketid,
             connectionId: remoteConnectionId,
             sessionDescription: localSessionDescription
         };
-        console.log('WebRTC Accepting call with: ', data);
+        console.log('WebRTC Accepting connection with: ', data);
         ownsocket.emit('webrtcmessage', data);
     }
 
-    function handleCallAccepted(connectionId, remoteSessionDescription) {
-        console.log('WebRTC Call accepted for connection: ', connectionId);
+    function handleConnectionAccepted(connectionId, remoteSessionDescription) {
+        console.log('WebRTC Connection accepted for connection: ', connectionId);
         var connection = connections[connectionId];
         connection.setRemoteDescription(new RTCSessionDescription(remoteSessionDescription));
     }
@@ -155,6 +153,15 @@ window.addEventListener('load', function() {
         connection.addIceCandidate(new RTCIceCandidate(remoteIceCandidate));
     }
 
+    function handleDeviceList(sourcesocketid, audioDevices, videoDevices) {
+        // Das muss die Anwendung entscheiden
+        WebRTC.dispatchEvent(new CustomEvent('remotedevicelist', { detail: {
+            socketid: sourcesocketid,
+            audioDevices: audioDevices,
+            videoDevices: videoDevices
+        } }));
+    }
+
     ownsocket.on('connect', async function() {
         console.log('WebRTC Connectd as socket ' + ownsocket.id);
 
@@ -163,9 +170,10 @@ window.addEventListener('load', function() {
             switch (message.type) {
                 case 'socketconnected': handleSocketConnect(message.socketid); break;
                 case 'socketdisconnected': handleSocketDisconnect(message.socketid); break;
-                case 'call': handleIncomingCall(message.sourcesocketid, message.connectionId, message.sessionDescription); break;
-                case 'acceptcall': handleCallAccepted(message.connectionId, message.sessionDescription); break;
+                case 'connect': handleIncomingConnection(message.sourcesocketid, message.deviceId, message.connectionId, message.sessionDescription); break;
+                case 'acceptconnection': handleConnectionAccepted(message.connectionId, message.sessionDescription); break;
                 case 'icecandidate': handleIceCandidate(message.connectionId, message.iceCandidate); break;
+                case 'devicelist': handleDeviceList(message.sourcesocketid, message.audioDevices, message.videoDevices); break;
             }
         });
 

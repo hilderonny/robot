@@ -5,24 +5,48 @@
         <script src="../webrtc.js"></script>
         <script>
 
-            var buttons = {};
+            var socketdivs = {};
 
+            var remotedevices = {};
+
+            function connectAll() {
+                Object.keys(remotedevices).forEach(function(socketid) {
+                    remotedevices[socketid].forEach(function(deviceid) {
+                        console.log(socketid, deviceid);
+                        WebRTC.connect(socketid, deviceid);
+                    });
+                });
+            }
+            
             WebRTC.addEventListener('socketconnected', function(event) {
                 var socketid = event.detail;
-                var button = document.createElement('button');
-                button.innerHTML = socketid;
-                button.addEventListener('click', function() {
-                    WebRTC.call(socketid);
-                });
-                document.body.appendChild(button);
-                buttons[socketid] = button;
+                var div = document.createElement('div');
+                div.innerHTML = '<p>' + socketid + '</p>';
+                socketdivs[socketid] = div;
+                document.body.appendChild(div);
             });
 
             WebRTC.addEventListener('socketdisconnected', function(event) {
                 var socketid = event.detail;
-                var button = buttons[socketid];
-                delete buttons[socketid];
-                button.parentNode.removeChild(button);
+                var div = socketdivs[socketid];
+                delete socketdivs[socketid];
+                div.parentNode.removeChild(div);
+            });
+
+            WebRTC.addEventListener('remotedevicelist', function(event) {
+                var socketid = event.detail.socketid;
+                var videoDevices = event.detail.videoDevices;
+                var div = socketdivs[socketid];
+                remotedevices[socketid] = [];
+                videoDevices.forEach(function(videoDevice) {
+                    remotedevices[socketid].push(videoDevice.deviceId);
+                    var button = document.createElement('button');
+                    button.innerHTML = videoDevice.label;
+                    button.addEventListener('click', function() {
+                        WebRTC.connect(socketid, videoDevice.deviceId);
+                    });
+                    div.appendChild(button);
+                });
             });
 
             WebRTC.addEventListener('remotestream', function(event) {
@@ -34,8 +58,11 @@
             });
 
         </script>
+        <style>
+            video { width: 200px; }
+        </style>
     </head>
     <body>
-
+        <button onclick="connectAll();">Alle verbinden</button>
     </body>
 </html>
