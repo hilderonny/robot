@@ -144,6 +144,7 @@ Description=PI 1
 After=network.target
 [Service]
 Type=idle
+WorkingDirectory=/gogs/levelupsoftware/robot/pi1/
 ExecStart=/usr/bin/node /gogs/levelupsoftware/robot/pi1/pi1.js
 [Install]
 WantedBy=default.target
