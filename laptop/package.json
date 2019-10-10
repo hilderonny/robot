@@ -1,7 +1,7 @@
 {
-  "name": "pi1",
-  "version": "2.0.0",
-  "main": "pi1.js",
+  "name": "laptop",
+  "version": "1.0.0",
+  "main": "laptop.js",
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^2.3.0"

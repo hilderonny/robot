@@ -1,10 +1,41 @@
 # Laptop
 
 Ich habe Ubuntu auf einem Laptop installiert und will dort mit gstreamer und WebRTC die Kamerabilder als Stereovideo streamen.
+Allerdings scheint es mir einfacher, unter X Chrome zu starten und dort eine lokale Seite aufzurufen, die wiederum die
+Webcams streamt.
+
 
 ## Installation
 
 Einfach erst mal Ubuntu ab Version 19 drauf.
+
+Jetzt NodeJS installieren (die aktuelle offizielle Version von der [Website](https://nodejs.org/en/download/))
+
+```sh
+apt purge nodejs npm
+apt autoremove
+
+wget https://nodejs.org/dist/v10.16.3/node-v10.16.3-linux-x64.tar.xz
+tar xf node-v10.16.3-linux-x64.tar.xz
+cd node-v10.16.3-linux-x64
+sudo cp -R * /usr/local/
+sudo ln -s /usr/local/bin/node /usr/bin/node
+sudo ln -s /usr/local/bin/npm /usr/bin/npm
+```
+
+Danach im Repository `npm install` aufrufen und den Server mit Root-Rechten starten (ist notwendig, um an Port 443 zu binden).
+
+```sh
+sudo node /gogs/levelupsoftware/robot/laptop/laptop.js
+```
+
+Auf dem Laptop `webcamserver.html`  und auf dem anderen Gerät `webcamclient.html` aufrufen.
+
+Bis jetzt geht das Streaming mit automatischer Verbindungsannahme. Allerdings wird pro Connection nur ein Stream unterstützt. Das heißt, dass ich für jede Kamera eine separate Connection aufbauen muss. Dazu muss ich den clients vorab mitteilen, welche Geräte es gibt und diese müssen dann deparate Verbindungen aufbauen, die genau diese Geräte anfordern.
+
+
+
+
 
 Danach *gstreamer* und *gcc* installieren
 
