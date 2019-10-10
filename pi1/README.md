@@ -122,31 +122,6 @@ Als nächstes wird ein SSL Zertifikat generiert, das wir für sichere WebRTC und
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt
 ```
 
-Ich hatte vor, NodeJS direkt als Webserver mit http-proxy als Modul einzusetzen. Dabei klappt aber das Video-Stream-Weiterleiten auf den ODROID nicht. Daher versuche ich es nochmal mit Apache.
-
-```
-apt install apache2
-a2enmod ssl
-a2enmod proxy
-a2enmod proxy_balancer
-a2enmod proxy_http
-a2enmod rewrite
-```
-
-Aber auch Apache geht nicht. Ich werde also mit iptables den Port 60020 einfach auf den Odroid Port 8080 umleiten. Dazu in `/etc/network/interfaces`:
-
-```
-up iptables -I INPUT -p tcp -m tcp --dport 60020 -j ACCEPT
-up iptables -t nat -A PREROUTING -p tcp --dport 60020 -j DNAT --to-destination 10.0.0.2:8080
-```
-
-
-
-
-
-
-
-
 Als Server benutze ich direkt ein NodeJS Skript, das auch als Proxy dient. Dann brauche ich nicht extra einen Apache einzurichten. Erst mal NodeJS installieren bzw. aktualisieren (sollte dann mindestens die 8er Version sein). Das geht am Besten, wenn man die vorinstallierte Version komplett entfernt und von den offiziellen [Quellen](https://nodejs.org/en/download/) herunter lädt (ArmV7).
 
 ```sh
@@ -185,6 +160,19 @@ systemctl enable pi1.service
 systemctl daemon-reload
 systemctl start pi1.service
 ```
+
+## Laptop und Quest
+
+Jetzt kann man am Latop die Kameras anschließen und die Url `/test/webcamserver.html` aufrufen.
+
+Auf der Quest dann `test/quest.html` aufrufen oder da hin navigieren.
+
+
+
+
+
+
+
 
 Weiter hier:
 https://stackoverflow.com/a/56885795
