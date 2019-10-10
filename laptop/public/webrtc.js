@@ -40,18 +40,26 @@ window.addEventListener('load', function() {
         };
 
         for (var i = 0; i < videoDevices.length; i++) {
-            var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
-            var tracks = stream.getTracks();
-            for (var j = 0; j < tracks.length; j++) {
-                connection.addTrack(tracks[j], stream);
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
             }
         }
 
         for (var i = 0; i < audioDevices.length; i++) {
-            var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
-            var tracks = stream.getTracks();
-            for (var j = 0; j < tracks.length; j++) {
-                connection.addTrack(tracks[j], stream);
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
             }
         }
 
@@ -100,18 +108,26 @@ window.addEventListener('load', function() {
         };
 
         for (var i = 0; i < videoDevices.length; i++) {
-            var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
-            var tracks = stream.getTracks();
-            for (var j = 0; j < tracks.length; j++) {
-                connection.addTrack(tracks[j], stream);
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[i].deviceId } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
             }
         }
 
         for (var i = 0; i < audioDevices.length; i++) {
-            var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
-            var tracks = stream.getTracks();
-            for (var j = 0; j < tracks.length; j++) {
-                connection.addTrack(tracks[j], stream);
+            try {
+                var stream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId: audioDevices[i].deviceId } });
+                var tracks = stream.getTracks();
+                for (var j = 0; j < tracks.length; j++) {
+                    connection.addTrack(tracks[j], stream);
+                }
+            } catch (error) {
+                console.error(error.message);
             }
         }
 

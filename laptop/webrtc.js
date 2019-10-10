@@ -27,7 +27,7 @@ function handleSocketDisconnect(socket) {
 function handleMessage(socket, message) {
     console.log('WebRTC: Socket ' + socket.id + ' sent a message of type ' + message.type);
     message.sourcesocketid = socket.id; // Damit der Empfaenger weiss, wo die Nachricht her kommt
-    if (message.type === 'call') {
+    if (message.targetsocketid) {
         sockets[message.targetsocketid].emit('webrtcmessage', message);
     } else {
         socket.broadcast.emit('webrtcmessage', message);
