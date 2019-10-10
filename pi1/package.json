@@ -4,8 +4,7 @@
   "main": "pi1.js",
   "dependencies": {
     "express": "^4.17.1",
-    "express-http-proxy": "^1.6.0",
-    "http-proxy": "^1.18.0"
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {}
 }

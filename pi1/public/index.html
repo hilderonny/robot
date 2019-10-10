@@ -1,32 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>J.A.R.V.I.S.</title>
-    <style>
-* { padding:0;margin:0; }
-html,body,#fse { display:flex;flex-direction:row;width:100%;flex:1; }
-.image { display:flex; }
-img { width:100%;height:100%; }
-    </style>
-    <script>
-window.addEventListener('load', function() {
-  var url2 = 'http://' + location.host + ':82/video_feed';
-  document.getElementById('pi2img').src = url2; 
-  var url3 = 'http://' + location.host + ':83/video_feed';
-  document.getElementById('pi3img').src = url3;
-  document.body.addEventListener('click', function(evt) {
-    console.log(evt);
-    toggleFullScreen();
-    document.getElementById('fse').requestFullscreen();
-  });
-});
-function toggleFullScreen() { if (!document.fullscreenElement && !document.msFullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) { if (document.body.requestFullscreen) { document.body.requestFullscreen(); } else if (document.body.msRequestFullscreen) { document.body.msRequestFullscreen(); }else if (document.body.mozRequestFullScreen) { document.body.mozRequestFullScreen(); }else if (document.body.webkitRequestFullscreen) { document.body.webkitRequestFullscreen(); } } else { if (document.exitFullscreen) { document.exitFullscreen(); } else if (document.msExitFullscreen) { document.msExitFullscreen(); }else if (document.mozCancelFullScreen) { document.mozCancelFullScreen(); }else if (document.webkitCancelFullScreen) { document.webkitCancelFullScreen(); } }}
-    </script>
-  </head>
-  <body>
-    <div id="fse">
-      <div class="image"><img id="pi2img"/></div>
-      <div class="image"><img id="pi3img"/></div>
-    </div>
-  </body>
-</html>
+<p><a href="dashboard.html">Dashboard</a></p>
+<p><a href="test/webcamserver.html">Webcam nur bereit stellen (Laptop)</a></p>
+<p><a href="test/webcamclient.html">Webcam nur betrachten (Quest)</a></p>
