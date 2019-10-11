@@ -48,7 +48,7 @@ Dann die Autostart-Datei `/home/pi/.config/lxsession/LXDE-pi/autostart` bearbeit
 xset s noblank
 
 # https://itrig.de/index.php?/archives/2309-Raspberry-Pi-3-Kiosk-Chromium-Autostart-im-Vollbildmodus-einrichten.html
-@chromium-browser --incognito --noerrdialogs --ignore-certificate-errors --kiosk https://localhost/dashboard.html
+@chromium-browser --incognito --noerrdialogs --ignore-certificate-errors --kiosk http://localhost/dashboard.html
 ```
 
 Beim nächsten Neustart wird diese URL automatisch angezeigt.

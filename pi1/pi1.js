@@ -1,4 +1,5 @@
 var express = require('express');
+var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var webrtc = require('./webrtc');
@@ -12,9 +13,12 @@ var options = {
   key: fs.readFileSync('ssl.key'),
   cert: fs.readFileSync('ssl.crt')
 };
-var server = https.createServer(options, app).listen(443, function() {
-  console.log('Running.');
+var httpsServer = https.createServer(options, app).listen(443, function() {
+  console.log('Running HTTPS.');
+});
+http.createServer(app).listen(80, function() {
+  console.log('Running HTTP.');
 });
 
 // WebRTC server
-webrtc(server);
+webrtc(httpsServer);
