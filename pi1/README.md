@@ -1,3 +1,20 @@
+# TODO
+
+Möglicherweise lassen sich die Videostreams doch mit nur einer Verbindung übertragen, wenn clientseitig `ontrack` anstelle von `onaddstream`
+verwendet wird: [https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/ontrack](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/ontrack).
+
+```js
+pc.ontrack = function(event) {
+  document.getElementById("received_video").srcObject = event.streams[0];
+  document.getElementById("hangup-button").disabled = false;
+};
+```
+
+Da scheint man für jeden Track des Streams einen eigenen Aufruf zu bekommen und kann dann die Tracks auf unterschiedliche video-Elemente aufteilen.
+
+
+
+
 # PI 1 - Gateway, Webserver, Display
 
 ## 1. Image installieren
