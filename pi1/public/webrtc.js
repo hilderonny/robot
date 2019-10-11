@@ -25,15 +25,15 @@ window.addEventListener('load', function() {
             try {
                 var stream = await navigator.mediaDevices.getUserMedia({ video: { 
                     deviceId: videoDevice.deviceId,
-                    //width: 320,
-                    //height: 240
+                    width: { exact: 1920 },
+                    height: { exact: 1080 }
                  } });
                 var tracks = stream.getTracks();
                 for (var j = 0; j < tracks.length; j++) {
                     connection.addTrack(tracks[j], stream);
                 }
             } catch (error) {
-                console.error(error.message);
+                console.error(error.name + ': ' + error.message);
             }
         }
         for (var i = 0; i < audioDevices.length; i++) {
@@ -46,7 +46,7 @@ window.addEventListener('load', function() {
                     connection.addTrack(tracks[j], stream);
                 }
             } catch (error) {
-                console.error(error.message);
+                console.error(error.name + ': ' + error.message);
             }
         }
     }
@@ -182,13 +182,13 @@ window.addEventListener('load', function() {
             await navigator.mediaDevices.getUserMedia({ audio: true });
             audioAvailable = true;
         } catch (error) {
-            console.error('Kein Zugriff auf Mikrofon möglich.');
+            console.error('Kein Zugriff auf Mikrofon möglich: ' + error.message);
         }
         try {
             await navigator.mediaDevices.getUserMedia({ video: true });
             videoAvailable = true;
         } catch (error) {
-            console.error('Kein Zugriff auf Kamera möglich.');
+            console.error('Kein Zugriff auf Kamera möglich: ' + error.message);
         }
         var devices = await navigator.mediaDevices.enumerateDevices();
         for (var i = 0; i < devices.length; i++) {
