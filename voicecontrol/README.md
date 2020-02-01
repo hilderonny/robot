@@ -142,4 +142,8 @@ mpg123 -C -b 512 http://stream.1a-webradio.de/deutsch/mp3-128/liveradio-1a
 mpg123 -C -b 512 http://streamtdy.ir-media-tec.com/live/mp3-128/web/play.mp3
 // Oder Sachsensong
 mpg123 hoer_off_de_muddi.mp3
+
+// Oder Game music
+apt install vorbis-tools
+ogg123 http://radio.goha.ru:8000/grindfm.ogg
 ```
