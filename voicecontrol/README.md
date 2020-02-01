@@ -116,7 +116,8 @@ wget http://steinerdatenbank.de/software/mbrola3.0.1h_armhf.deb (bzw. einfach au
 dpkg -i mbrola3.0.1h_armhf.deb
 apt-get install espeak python-espeak mbrola-de6 mbrola-de7 mbrola-de4 mbrola-de5
 
-espeak -v mb-de5 "Ich habe eine wunderschöne Stimme."
+espeak -s 120 -v mb-de5 --stdout "Ich habe eine wunderschöne Stimme." | aplay -
+espeak -v mb-de6 --stdout "Hallo! Ist da oben jemand?" | aplay -
 ```
 
 In letzter Zeit sind diese Server schlecht erreichbar. Daher habe ich die Installationspakete für mbrola und die Stimmen in dieses Verzeichnis gelegt. Die Installation geht dann so:
