@@ -119,6 +119,14 @@ apt-get install espeak python-espeak mbrola-de6 mbrola-de7 mbrola-de4 mbrola-de5
 espeak -v mb-de5 "Ich habe eine wunderschöne Stimme."
 ```
 
+In letzter Zeit sind diese Server schlecht erreichbar. Daher habe ich die Installationspakete für mbrola und die Stimmen in dieses Verzeichnis gelegt. Die Installation geht dann so:
+
+```
+sudo apt install ./mbrola3.0.1h_armhf.deb
+sudo apt install ./mbrola-de6_0.0.20021125+repack2-5_all.deb
+```
+
+
 mb-de5 ist eine gute weibliche und mb-de6 eine gute männliche Stimme.
 
 Zur Verwendung in Python nehme ich os.system und rufe espeak direkt auf. Das scheint mir am einfachsten (hear_and_speak.py).
