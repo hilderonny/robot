@@ -127,7 +127,19 @@ sudo apt install ./mbrola3.0.1h_armhf.deb
 sudo apt install ./mbrola-de6_0.0.20021125+repack2-5_all.deb
 ```
 
-
 mb-de5 ist eine gute weibliche und mb-de6 eine gute männliche Stimme.
 
 Zur Verwendung in Python nehme ich os.system und rufe espeak direkt auf. Das scheint mir am einfachsten (hear_and_speak.py).
+
+# Musik streamen
+
+Unter http://borwinius.de/wiki/doku.php?id=linux:audio wird beschrieben, wie man mit der Kommandozeile Musik streamen kann. Geht mit dem Roboter auch ganz gut, der singt dann!
+
+```
+mpg123 -C -b 512 http://stream.1a-webradio.de/deutsch/mp3-128/liveradio-1a
+
+// Oder Radio Teddy
+mpg123 -C -b 512 http://streamtdy.ir-media-tec.com/live/mp3-128/web/play.mp3
+// Oder Sachsensong
+mpg123 hoer_off_de_muddi.mp3
+```
