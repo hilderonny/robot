@@ -147,3 +147,55 @@ mpg123 hoer_off_de_muddi.mp3
 apt install vorbis-tools
 ogg123 http://radio.goha.ru:8000/grindfm.ogg
 ```
+
+# Kaldi 2020
+
+Inzwischen scheint wich das Kaldi Projekt gemausert zu haben und es gibt auch schon über 400 Stunden Trainingsmaterial für Deutsch.
+
+Unter https://www.raspberrypi.org/forums/viewtopic.php?t=216638 sind wohl auch Prebuilt Binaries für den Raspberry erhältlich.
+
+```
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/libkaldi-asr_5.4.248-3_armhf.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/kaldi-chain-zamia-speech-de_20190328-1_armhf.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/kaldi-chain-zamia-speech-en_20190609-1_armhf.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-kaldiasr_0.5.2-1_armhf.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-espeakng_0.1.5-1_all.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-marytts_0.1.4-1_all.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-num2words_0.5.7-1_all.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-picotts_0.1.2-1_all.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-webrtcvad_2.0.11-4_armhf.deb
+wget https://goofy.zamia.org/repo-ai/raspbian/stretch/armhf/python-nltools_0.5.0-1_all.deb
+
+apt install ./libkaldi-asr_5.4.248-3_armhf.deb
+apt install ./kaldi-chain-zamia-speech-de_20190328-1_armhf.deb
+apt install ./kaldi-chain-zamia-speech-en_20190609-1_armhf.deb
+apt install ./python-kaldiasr_0.5.2-1_armhf.deb
+apt install ./python-espeakng_0.1.5-1_all.deb
+apt install ./python-marytts_0.1.4-1_all.deb
+apt install ./python-num2words_0.5.7-1_all.deb
+apt install ./python-picotts_0.1.2-1_all.deb
+apt install ./python-webrtcvad_2.0.11-4_armhf.deb
+apt install ./python-nltools_0.5.0-1_all.deb
+apt install pulseaudio-utils pulseaudio
+
+wget http://goofy.zamia.org/zamia-speech/misc/demo_wavs.tgz
+wget http://goofy.zamia.org/zamia-speech/misc/kaldi_decode_wav.py
+tar xfvz demo_wavs.tgz
+
+python kaldi_decode_wav.py -v demo?.wav
+```
+
+Die Installation dauert fast eine Stunde, weil die Kaldi-Pakete riesig sind.
+Der Demolauf braucht auch länger. Etwa 4-6 mal so lange, wie der zu erkennende Text.
+
+Die Mikrofonaufnahme wird hier beschrieben: https://github.com/gooofy/zamia-speech/blob/master/README.md#live-mic-demo
+
+```
+pactl list sources
+// Ausgabe merken, da steht der Gerätename drin
+wget http://goofy.zamia.org/zamia-speech/misc/kaldi_decode_live.py
+python kaldi_decode_live.py -s 'CM108'
+```
+
+Hmm, solange die Erkennung nicht schneller geht (entweder durch bessere Software oder bessere Hardware), komme ich wohl um einen Online-Dienst nicht herum.
+Oder ich setze ein Android-Gerät ein, dass mit den Google Algorithmen offline nur die Erkennung macht und die Ergebnisse per lokalem Netz an den PI schickt.
