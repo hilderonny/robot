@@ -199,3 +199,5 @@ python kaldi_decode_live.py -s 'CM108'
 
 Hmm, solange die Erkennung nicht schneller geht (entweder durch bessere Software oder bessere Hardware), komme ich wohl um einen Online-Dienst nicht herum.
 Oder ich setze ein Android-Gerät ein, dass mit den Google Algorithmen offline nur die Erkennung macht und die Ergebnisse per lokalem Netz an den PI schickt.
+
+Ein weiterer interessanter Ansatz wäre die aktuelle Version von [DeepSpeech](https://www.pro-linux.de/news/1/27648/mozilla-gibt-deepspeech-06-frei.html), was wohl in Echtzeit auf einem Raspi 4 laufen sollte.
