@@ -8,6 +8,10 @@
 # ISO kopiert und von dort aus ausgeführt werden, wobei wlan0
 # verfuegbar sein sollte.
 
+# Bash farbig machen: https://misc.flogisoft.com/bash/tip_colors_and_formatting
+# Script bei Fehler abbrechen lassen: https://intoli.com/blog/exit-on-errors-in-bash-scripts/
+set -e
+
 # Pruefen, ob als root ausgefuehrt
 if [ $(id -u) -ne 0 ]; then
         echo "Please run as root or sudo"

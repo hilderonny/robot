@@ -1,8 +1,9 @@
 # Sprachsteuerung
 
 Hierfür verwende ich das ReSpeaker 4-Mic Array von SeedStudio.
+https://respeaker.io/4_mic_array/
 
-http://www.seeed.cc, BN paypal@hildebrandt2014.d, PW 76048645247
+http://www.seeed.cc, BN paypal@hildebrandt2014.de, PW 76048645247
 
 ## Mikrofon einrichten und Richtung erkennen
 
@@ -11,7 +12,7 @@ apt-get install git mc python-pip python-pyaudio python-numpy
 
 pip install pixel-ring gpiozero
 
-git clone https://github.com/respeaker/seeed-voicecard
+git clone https://gitlab.com/hilderonny/seeed-voicecard
 
 ./seeed-voicecard/install.sh
 
@@ -114,7 +115,7 @@ Für schönere Stimmen können MBROLA-Stimmen verwendet werden. Allerdings ist d
 ```
 wget http://steinerdatenbank.de/software/mbrola3.0.1h_armhf.deb (bzw. einfach aus diesem Verzeichnis nehmen)
 dpkg -i mbrola3.0.1h_armhf.deb
-apt-get install espeak python-espeak mbrola-de6 mbrola-de7 mbrola-de4 mbrola-de5
+apt-get install espeak python-espeak mbrola-de5 mbrola-de6
 
 espeak -s 120 -v mb-de5 --stdout "Ich habe eine wunderschöne Stimme." | aplay -
 espeak -v mb-de6 --stdout "Hallo! Ist da oben jemand?" | aplay -
@@ -124,6 +125,7 @@ In letzter Zeit sind diese Server schlecht erreichbar. Daher habe ich die Instal
 
 ```
 sudo apt install ./mbrola3.0.1h_armhf.deb
+sudo apt install ./mbrola-de5_1.0+repack2-4_all.deb
 sudo apt install ./mbrola-de6_0.0.20021125+repack2-5_all.deb
 ```
 
