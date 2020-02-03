@@ -19,6 +19,8 @@ git clone https://gitlab.com/hilderonny/seeed-voicecard
 python ./mic_direction.py
 ```
 
+Mit alsamixer lässt sich die Emfindlichkeit einstellen. Dabei habe ich die ADC gains auf 100 und die digital volumes auf 71 eingestellt. Bei diesem Verhältnis ist der Signal-Rausch Abstand recht brauchbar.
+
 ## Spracherkennung mit PocketSphinx
 
 https://github.com/slowrunner/Pi3RoadTest
@@ -203,3 +205,15 @@ Hmm, solange die Erkennung nicht schneller geht (entweder durch bessere Software
 Oder ich setze ein Android-Gerät ein, dass mit den Google Algorithmen offline nur die Erkennung macht und die Ergebnisse per lokalem Netz an den PI schickt.
 
 Ein weiterer interessanter Ansatz wäre die aktuelle Version von [DeepSpeech](https://www.pro-linux.de/news/1/27648/mozilla-gibt-deepspeech-06-frei.html), was wohl in Echtzeit auf einem Raspi 4 laufen sollte.
+
+Meine Fresse, die Live-Spracherkennung mit dem Speaker Array und Kaldi geht doch in Echtzeit und recht fix. Kommt zwar auf Englisch viel Schnulli raus, aber es ist schonmal ein Anfang.
+
+Dazu muss in `kaldi_decode_live.py` diese Zeile eingetragen sein, dann versteht er auch deutsch.
+
+```
+DEFAULT_MODEL_DIR                = '/opt/kaldi/model/kaldi-generic-de-tdnn_250'
+````
+
+Nun muss ich noch die Mikrofonempfindlichkeit richtig einstellen.
+Das geht mit `mikrofon-einstellen.sh`.
+
