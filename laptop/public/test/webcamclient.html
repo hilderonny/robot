@@ -57,12 +57,19 @@
                 document.body.appendChild(video);
             });
 
+            window.addEventListener('load', function() {
+                WebRTC.speak('Ich habe mich verbunden');
+            });
+
         </script>
         <style>
             video { width: 200px; }
         </style>
     </head>
     <body>
+        <div>
+            <input id="text"/><button onclick="WebRTC.speak(document.getElementById('text').value)">Sprechen</button>
+        </div>
         <button onclick="connectAll();">Alle verbinden</button>
     </body>
 </html>
