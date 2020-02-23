@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Server</title>
+        <script src="../qrcode.min.js"></script>
         <script src="../webrtc.js"></script>
         <script>
 
@@ -9,9 +10,18 @@
                 console.log(event.detail);
             });
 
+            window.addEventListener('load', function() {
+                var clienturl = location.href.substr(0, location.href.lastIndexOf('/')) + '/webcamclient.html';
+                document.getElementById('url').innerHTML = clienturl;
+                new QRCode(document.getElementById('qrcode'), clienturl);
+            });
+
         </script>
     </head>
     <body>
-
+        <h1>URL für webcamclient.html</h1>
+        <h2>Mit Smartphone scannen</h2>
+        <h3 id="url"></h3>
+        <div id="qrcode"></div>
     </body>
 </html>

@@ -92,6 +92,13 @@ window.addEventListener('load', function() {
 
     };
 
+    WebRTC.speak = function(text) {
+        ownsocket.emit('webrtcmessage', { 
+            type: 'speak', 
+            text: text
+        });
+    }
+
     function handleSocketConnect(socketid) {
         console.log('WebRTC Socket ID ' + socketid + ' added to known socket ids');
         knownsocketids[socketid] = {};

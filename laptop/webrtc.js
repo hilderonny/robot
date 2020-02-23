@@ -1,6 +1,11 @@
 var socketio = require('socket.io');
+var exec = require('child_process').exec;
 
 var sockets = {};
+
+function speak(text) {
+    exec('espeak -s 120 -v mb-de6 --stdout "' + text + '" | aplay -');
+}
 
 function handleSocketConnect(newsocket) {
     console.log('WebRTC: Socket ' + newsocket.id + ' connected.');
@@ -27,7 +32,9 @@ function handleSocketDisconnect(socket) {
 function handleMessage(socket, message) {
     console.log('WebRTC: Socket ' + socket.id + ' sent a message of type ' + message.type);
     message.sourcesocketid = socket.id; // Damit der Empfaenger weiss, wo die Nachricht her kommt
-    if (message.targetsocketid) {
+    if (message.type === 'speak') {
+        speak(message.text);
+    } else if (message.targetsocketid) {
         sockets[message.targetsocketid].emit('webrtcmessage', message);
     } else {
         socket.broadcast.emit('webrtcmessage', message);
