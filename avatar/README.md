@@ -1,0 +1,33 @@
+# Avatar
+
+Fernsteuerung für Roboter mit Video- und Audiofeed vom Roboter zum Client und Audiofeed vom Client zum Roboter. Ausserdem werden Kopfbewegungen gesteuert.
+
+## Prinzipien
+
+Erst mal soll alles so performant wie möglich sein. Das heißt, dass ich nach Möglichkeit auf komplizierte Frameworks verzichten möchte.
+Die Kommunikation zwischen Client und Roboter soll schnell sein. Ich versuche, alles über Websockets zu machen. Um hier Verschlüsselungsaufwand zu sparen, werde ich sehen, ob ich die Verbindung auch ohne HTTPS hinbekomme und trotzdem auf das Mikrofon zugreifen kann.
+
+Letztendlich will ich das alles mit der Quest machen. Der Einfachheit halber kann ich die Client-App als AFRAME-App aufbauen.
+Falls ich hier aber Probleme mit dem Mikrofon-Zugriff haben sollte, will ich versuchen, eine native Anwendung mit dem Oculus SDK zu bauen. Auf Unity wollte ich nicht zurück greifen, weil mir das zu umfangreich für diesen Anwendungsfall erscheint.
+
+## Videofeed vom Server zum Client
+
+## Audiofeed vom Server zum Client
+
+## Audiofeed vom Client zum Server
+
+Laut [diesem Mozilla Eintrag](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Security) sollte es nicht möglich sein, per Browser auf das Mikrofon zuzugreifen, wenn man die Seite nicht über https lädt. Das macht die Serverimplementierung etwas schwieriger.
+
+Das native Oculus SDK basiert auf einer Android-Anwendung. Ich kann dort also sowas bauen, muss mich dann aber um das Rendern kümmern. Audio nehme ich dann mit Standard-Android-Funktionen auf. Da ich hierbei auf das Android Studio und alle Sicherheitseigenheiten von Android angewiesen binn, kann es sehr viel länger dauern, bis ich zu einem Ergebnis komme. Aber es wird dann vermutlich performanter als eine Browser-Anwendung sein.
+
+https://audio-chat.glitch.me/
+
+
+## Motorensteuerung vom Client zum Server
+
+https://libraries.io/npm/adafruit-pca9685
+
+
+## Interessante Links
+https://developer.oculus.com/documentation/mrc/mr-quest/
+https://developer.oculus.com/documentation/native/audio-intro/
