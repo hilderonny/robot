@@ -10,6 +10,10 @@ Die Kommunikation zwischen Client und Roboter soll schnell sein. Ich versuche, a
 Letztendlich will ich das alles mit der Quest machen. Der Einfachheit halber kann ich die Client-App als AFRAME-App aufbauen.
 Falls ich hier aber Probleme mit dem Mikrofon-Zugriff haben sollte, will ich versuchen, eine native Anwendung mit dem Oculus SDK zu bauen. Auf Unity wollte ich nicht zurück greifen, weil mir das zu umfangreich für diesen Anwendungsfall erscheint.
 
+## Verbindung zwischen Server und Client
+
+Ich werden NodeJS und socket.io benutzen. Dabei aber socket.io [zwingen](https://socket.io/docs/client-api/#With-websocket-transport-only), per echten Websockets anstatt long polling zu arbeiten. Nur echte websockets sind performant genug, um Video- und Audiodaten in nahezu Echtzeit zwischen Client und Server bidirektional zu übertragen.
+
 ## Videofeed vom Server zum Client
 
 ## Audiofeed vom Server zum Client
