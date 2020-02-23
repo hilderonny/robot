@@ -35,3 +35,8 @@ https://libraries.io/npm/adafruit-pca9685
 ## Interessante Links
 https://developer.oculus.com/documentation/mrc/mr-quest/
 https://developer.oculus.com/documentation/native/audio-intro/
+
+https://stackoverflow.com/a/35672668
+https://www.npmjs.com/package/socket.io-stream
+https://github.com/TooTallNate/node-speaker#readme
+
