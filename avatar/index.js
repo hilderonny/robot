@@ -27,7 +27,7 @@ io.on('connection', function(socket) {
     var spk = new speaker({
         channels: 2,
         bitDepth: 16,
-        sampleRate: 48000
+        sampleRate: 44100
     });
     socket.on('audio', function(data) {
         var readable = new stream.Readable(); // https://stackoverflow.com/a/35672668

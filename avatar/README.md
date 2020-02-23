@@ -26,6 +26,8 @@ Das native Oculus SDK basiert auf einer Android-Anwendung. Ich kann dort also so
 
 https://audio-chat.glitch.me/
 
+Die Übertragung vom Client zum Server habe ich bisher nur mit enorm viel Rauschen hinbekommen. Ich sollte mal  [AudioStreamer](https://github.com/noamtcohen/AudioStreamer) probieren, ob ich damit besser zurecht komme.
+
 
 ## Motorensteuerung vom Client zum Server
 
