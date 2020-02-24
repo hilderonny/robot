@@ -8,8 +8,6 @@
   "dependencies": {
     "binaryjs": "^0.2.1",
     "express": "^4.17.1",
-    "socket.io": "^2.3.0",
-    "socket.io-stream": "^0.9.1",
     "speaker": "^0.5.1"
   }
 }
