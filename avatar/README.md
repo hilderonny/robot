@@ -28,6 +28,8 @@ https://audio-chat.glitch.me/
 
 Die Übertragung vom Client zum Server habe ich bisher nur mit enorm viel Rauschen hinbekommen. Ich sollte mal  [AudioStreamer](https://github.com/noamtcohen/AudioStreamer) probieren, ob ich damit besser zurecht komme.
 
+Der [AudioStreamer](https://github.com/noamtcohen/AudioStreamer) mit binaryjs hat zumindest auf dem MacBook schon funktioniert. Ich musste da aber die angepasst Client-Bibliothek binary.js benutzen, da das Originale von binaryjs nicht funktionierte. Um speaker.js auf dem Raspberry zum Laufen zu bringen, braucht man `asoundlib.h`, welches man mit `apt install libasound2-dev` erhält. Jupp, wenn man das macht, funktioniert die Übertragung zum Raspberry problemlos.
+
 
 ## Motorensteuerung vom Client zum Server
 
