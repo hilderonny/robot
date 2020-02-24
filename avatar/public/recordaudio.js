@@ -1,48 +1,28 @@
 function startrecording() {
-  navigator.mediaDevices.getUserMedia({audio: true}).then(function(mediaStream) {
-    console.log(mediaStream.getAudioTracks()[0].getSettings());
-    var audioCtx = new window.AudioContext();
-    var sourceNode = audioCtx.createMediaStreamSource(mediaStream);
-    var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
-    recorder.onaudioprocess = function(evt) {
-      var inputBuffer = evt.inputBuffer;
-      var data = inputBuffer.getChannelData(0);
-      var buf = (new Float32Array(data)).buffer;
-      var array8 = new Uint8Array(buf);
-    socket.emit('audio', array8);
-//      console.log(data);
+
+  var convertFloat32ToInt16 = function(buffer) {
+    var l = buffer.length;
+    var buf = new Int16Array(l);
+    while (l--) {
+        buf[l] = Math.min(1, buffer[l]) * 0x7FFF;
     }
-    sourceNode.connect(recorder);
-    recorder.connect(audioCtx.destination);
-  }, function(err) {
-    console.log(err);
-  });
-}
+    return buf.buffer;
+  };
 
-function startstreamrecording() {
   navigator.mediaDevices.getUserMedia({audio: true}).then(function(mediaStream) {
-    console.log(mediaStream);
-    var audioCtx = new window.AudioContext();
-    var sourceNode = audioCtx.createMediaStreamSource(mediaStream);
-    var recorder = audioCtx.createScriptProcessor(4096, 1, 1);
-
-    var stream = ss.createStream();
-    ss(socket).emit('audiostream', stream);
-
-
-    recorder.onaudioprocess = function(evt) {
-      var inputBuffer = evt.inputBuffer;
-      var data = inputBuffer.getChannelData(0);
-      //console.log(data);
-      //stream.write(data);
-      var buf = (new Float32Array(data)).buffer;
-      var array8 = new Uint8Array(buf);
-      console.log(array8);
-      stream.write(array8);
-      //socket.emit('audio', data);
-    }
-    sourceNode.connect(recorder);
-    recorder.connect(audioCtx.destination);
+    var client = new BinaryClient('wss://' + location.host);
+    client.on('open', function () {
+      var audioCtx = new window.AudioContext();
+      var bStream = client.createStream({sampleRate: audioCtx.sampleRate});
+      var audioInput = audioCtx.createMediaStreamSource(mediaStream);
+      var recorder = audioCtx.createScriptProcessor(0, 1, 1);
+      recorder.onaudioprocess = function(evt) {
+        var left = evt.inputBuffer.getChannelData(0);
+        bStream.write(convertFloat32ToInt16(left));
+      };
+      audioInput.connect(recorder);
+      recorder.connect(audioCtx.destination);
+    });
   }, function(err) {
     console.log(err);
   });

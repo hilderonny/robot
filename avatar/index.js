@@ -1,10 +1,8 @@
 var express = require('express');
 var https = require('https');
 var fs = require('fs');
-var socketio = require('socket.io');
-var ss = require('socket.io-stream');
+var binaryjs = require('binaryjs');
 var speaker = require('speaker');
-var stream = require('stream');
 
 // Express application
 var app = express();
@@ -20,36 +18,23 @@ server.listen(443, function() {
     console.log('Running.');
 });
 
-// Websockets
-var io = socketio(server);
-io.on('connection', function(socket) {
-    console.log('a user connected');
-    var spk = new speaker({
-        channels: 2,
-        bitDepth: 16,
-        sampleRate: 44100
-    });
-    socket.on('audio', function(data) {
-        var readable = new stream.Readable(); // https://stackoverflow.com/a/35672668
-        //readable.pipe(spk);
-        var values = Object.values(data);
-        //var buf = (new Float32Array(values)).buffer;
-        var array8 = new Uint8Array(values);
-        //readable.push(array8);
-        spk.write(array8);
-        values.forEach(val => {
-//            readable.push(val);
-        });
-//        var buf = Float32Array.from(values).buffer;
-//        console.log(buf);
-//        spk.write(buf);
-        //console.log(data);
-    });
-    ss(socket).on('audiostream', function(stream) {
-        stream.on('data', function(chunk) {
-            //spk.write(chunk);
-            //console.log(chunk);
+var binaryServer = binaryjs.BinaryServer({server:server});
+binaryServer.on('connection', function(client) {
+    console.log("new connection...");
+    var spk = null;
+    client.on('stream', function(stream, meta) {
+        console.log("Stream Start@" + meta.sampleRate +"Hz");
+        spk = new speaker({
+            channels: 1,
+            bitDepth: 16,
+            sampleRate: meta.sampleRate
         });
         stream.pipe(spk);
+    });
+    client.on('close', function() {
+        if ( spk != null ) {
+            spk.close();
+        }
+        console.log("Connection Closed");
     });
 });
