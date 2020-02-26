@@ -47,3 +47,11 @@ network={
 Danach SD-Karte einstecken und PI starten.
 Als Anmeldung dient pi/raspberry.
 
+# Backup von SD-Karte
+
+Das geht am Besten unter Linux
+
+```
+dd if=/dev/sdb | gzip > backup.img.gz
+```
+
