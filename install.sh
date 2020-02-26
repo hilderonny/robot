@@ -1,12 +1,6 @@
 #!/bin/sh
 
 # Macht erste Einstellungen und laedt das GitLab-Repository herunter.
-# Danach wird je nach Parameter das install-Script im entsprechenden
-# Unterverzeichnis aufgerufen.
-# Beispielaufruf: install.sh pi1 SSID PSK
-# Diese Datei sollte in die boot-Partition einer frischen Raspbian
-# ISO kopiert und von dort aus ausgeführt werden, wobei wlan0
-# verfuegbar sein sollte.
 
 # Bash farbig machen: https://misc.flogisoft.com/bash/tip_colors_and_formatting
 # Script bei Fehler abbrechen lassen: https://intoli.com/blog/exit-on-errors-in-bash-scripts/
@@ -18,52 +12,13 @@ if [ $(id -u) -ne 0 ]; then
         exit 0
 fi
 
-# Parameter pruefen, es muss das Unterverzeichnis, die SSID und die PSK angegeben sein
-if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
-        echo "Usage: ./install.sh \"SUBDIRECTORY\" \"SSID\" \"PSK\""
-        exit 0
-fi
+apt update
+apt upgrade
+apt install git
+#curl -sL https://deb.nodesource.com/setup_8.x | bash -
+#apt-get install -y nodejs
 
-# Globale Variablen festlegen
-SUBDIR=$1
-SSID=$2
-PSK=$3
-WPASUPPLICANTFILE=/etc/wpa_supplicant/wpa_supplicant.conf
-INSTALLPATH=/gitlab/hilderonny/robot
-
-echo "Configuring network for internet access ..."
-cat > $WPASUPPLICANTFILE << EOM
-network={
-	ssid="$SSID"
-	psk="$PSK"
-}
-EOM
-cat > /etc/network/interfaces << EOM
-auto wlan0
-iface wlan0 inet dhcp
-	wpa-conf $WPASUPPLICANTFILE
-EOM
-echo "Restarting network ..."
-ifdown wlan0
-ifup wlan0
-
-echo "Enabling SSH ..."
-update-rc.d ssh enable
-invoke-rc.d ssh start
-
-echo "Installing packages ..."
-apt-get update
-apt-get --yes --force-yes install git
-curl -sL https://deb.nodesource.com/setup_8.x | bash -
-apt-get install -y nodejs
-
-echo "Cloning repository ..."
-mkdir -p $INSTALLPATH
 git config credential.helper store
-git clone https://hilderonny@gitlab.com/hilderonny/robot.git $INSTALLPATH
+git clone https://hilderonny@gitlab.com/hilderonny/robot.git
 
-echo "Running install script for $SUBDIR ..."
-sh $INSTALLPATH/$SUBDIR/install.sh
-
-echo "Done ./install"
 exit 0
