@@ -102,4 +102,19 @@ make -C /lib/modules/$(uname -r )/build M=$(pwd) modules
 sudo insmod my_loader.ko
 ```
 
+Das Modul automatisch laden lassen
 
+```
+sudo cp my_loader.ko /lib/modules/$(uname -r)
+echo 'my_loader' | sudo tee --append /etc/modules > /dev/null
+sudo depmod -a
+sudo modprobe my_loader
+```
+
+Nach einem Reboot testen:
+
+```
+arecord -l
+arecord -D plughw:1 -c2 -r 48000 -f S32_LE -t wav -V stereo -v file_stereo.wav
+aplay file_stereo.wav
+```
