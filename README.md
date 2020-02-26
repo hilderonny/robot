@@ -55,3 +55,51 @@ Das geht am Besten unter Linux
 dd if=/dev/sdb | gzip > backup.img.gz
 ```
 
+# Mikrofonboard von Adafruit
+
+Nach der Anleitung von [Adafruit](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-and-test) wird momentan nur der Raspi 3 brauchbar unterstützt. Mit dem 4er habe ich es nicht hinbekommen.
+
+![](https://cdn-learn.adafruit.com/guides/cropped_images/000/001/592/medium640/pintou.jpg?1520544902)
+
+In `/boot/config.txt` das hier eintragen:
+
+```
+dtparam=i2s=on
+```
+
+Zu `/etc/modules` hinzufügen:
+
+```
+snd-bcm2835
+```
+
+Neu starten und mit `lsmod | grep snd` prüfen, ob das Modul auch wirklich geladen wurde. Da muss `snd_bcm2835` drinstehen.
+
+Jetzt kommt die Kernel-Kompilierung dran.
+
+```
+sudo apt update
+sudo apt install rpi-update git bc libncurses5-dev bison flex libssl-dev
+sudo rpi-update
+```
+
+Das dauert etwa 7 Minuten. Danach neu starten. Danach Kernel herunterladen und kompilieren:
+
+```
+sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source
+sudo chmod +x /usr/bin/rpi-source
+/usr/bin/rpi-source -q --tag-update
+rpi-source --skip-gcc
+sudo mount -t debugfs debugs /sys/kernel/debug
+```
+
+Audio-Modul installieren:
+
+```
+git clone https://github.com/PaulCreaser/rpi-i2s-audio
+cd rpi-i2s-audio
+make -C /lib/modules/$(uname -r )/build M=$(pwd) modules
+sudo insmod my_loader.ko
+```
+
+
