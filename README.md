@@ -118,3 +118,15 @@ arecord -l
 arecord -D plughw:1 -c2 -r 48000 -f S32_LE -t wav -V stereo -v file_stereo.wav
 aplay file_stereo.wav
 ```
+
+Danach kann man die Lautstärkeregelung für das Mikrofon nach [dieser Anleitung](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-and-test#adding-volume-control-5-67) einrichten.
+
+Beim Aufnehmen, bevor alsamixer gehen kann, muss man mindestens einmal aufnehmen. Dabei aber anstelle von `plughw:1` die gerade eingerichtete Karte `dmic_sv`verwnden:
+
+```
+arecord -D dmic_sv -c2 -r 48000 -f S32_LE -t wav -V stereo -v file_stereo.wav
+```
+
+Bis zu einer Verstärkung von 57 geht alsamixer mit, danach fängt die Aufnahme an zu fiepen.
+Eventuell reicht da der Strom nicht mehr aus, den der Raspberry über den 3.3V Port ausgibt.
+Ich werde mal probieren, wie weit ich gehen kann, wenn ich die 3.3V direkt vom Netzteil abgreife.
