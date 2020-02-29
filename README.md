@@ -130,3 +130,34 @@ arecord -D dmic_sv -c2 -r 48000 -f S32_LE -t wav -V stereo -v file_stereo.wav
 Bis zu einer Verstärkung von 57 geht alsamixer mit, danach fängt die Aufnahme an zu fiepen.
 Eventuell reicht da der Strom nicht mehr aus, den der Raspberry über den 3.3V Port ausgibt.
 Ich werde mal probieren, wie weit ich gehen kann, wenn ich die 3.3V direkt vom Netzteil abgreife.
+
+# Audio und Video streamen
+
+Dazu wird ffmpeg als Aufnahmesoftware und mkvserver als Streaming-Server verwendet. Die Installation geht so:
+
+```
+sudo apt install ffmpeg libavformat-dev
+git clone https://github.com/klaxa/mkvserver_mk2.git
+cd mkvserver_mk2
+make
+```
+
+Um den Port zu ändern, muss man vor `make`in der Datei `server2.c` irgendwo gegen Ende diese Zeile ändern:
+
+```
+ainfo.out_uri = "http://0:8080";
+```
+
+Den Server mit Audiostream startet man dann (vorausgesetzt, die Mikrofoneinstellungen aus dem vorhergehenden Kapitel funktionieren) hier so:
+
+```
+ffmpeg -f alsa -i dmic_sv -f matroska - | ./server
+```
+
+Zum Testen auf einem anderen Linux-Gerät:
+
+```
+ffplay http://192.168.178.70:8080
+```
+
+Bis jetzt scheint das alles aber nicht zu funktionieren.
