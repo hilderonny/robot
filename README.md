@@ -160,4 +160,6 @@ Zum Testen auf einem anderen Linux-Gerät:
 ffplay http://192.168.178.70:8080
 ```
 
-Bis jetzt scheint das alles aber nicht zu funktionieren.
+Bis jetzt scheint das alles aber nicht zu funktionieren. Aber vielleicht hilft das hier weiter:
+https://stackoverflow.com/questions/28193491/node-js-streams-audio-only-when-alsas-arecord-stops-recording
+https://github.com/vincentsaluzzo/node-microphone/blob/master/index.js
