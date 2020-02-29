@@ -170,5 +170,9 @@ ffplay http://192.168.178.70:8080
 ```
 
 Bis jetzt scheint das alles aber nicht zu funktionieren. Aber vielleicht hilft das hier weiter:
-https://stackoverflow.com/questions/28193491/node-js-streams-audio-only-when-alsas-arecord-stops-recording
-https://github.com/vincentsaluzzo/node-microphone/blob/master/index.js
+- https://stackoverflow.com/questions/28193491/node-js-streams-audio-only-when-alsas-arecord-stops-recording
+- https://github.com/vincentsaluzzo/node-microphone/blob/master/index.js
+- http://www.jingpingji.com/blog/2015/8/4/transferring-sound-data-with-binaryjs-and-buffering-for-smooth-playbac
+- https://stackoverflow.com/a/26029102
+
+Das ganze liegt unter `./audioserver` hier im Repository.
