@@ -62,7 +62,10 @@ Installation als `root` von https://github.com/nodesource/distributions#debinsta
 ```
 curl -sL https://deb.nodesource.com/setup_13.x | bash -
 apt install -y nodejs
+sudo setcap CAP_NET_BIND_SERVICE=+eip /usr/bin/node
 ```
+
+Das letzte dient dazu, dass auch der normale Benutzer an Port 443 binden kann.
 
 # Mikrofonboard von Adafruit
 
