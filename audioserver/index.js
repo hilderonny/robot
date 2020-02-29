@@ -19,20 +19,13 @@ server.listen(443, function() {
     console.log('Running.');
 });
 
-var binaryServer = binaryjs.BinaryServer({server:server});
-binaryServer.on('connection', function(client) {
-    console.log("new connection...");
-    var ps = null;
-    client.on('stream', function(stream, meta) {
-        console.log("Stream Start");
-        ps = spawn('arecord', ['-D dmic_sv', '-c2', '-r 48000', '-f S32_LE', '-t wav', '-V stereo']);
-        ps.stdout.pipe(stream);
-    });
-    client.on('close', function() {
-        if ( ps != null ) {
-            ps.kill();
-            ps = null;
-        }
-        console.log("Connection Closed");
-    });
+var ps = null;
+
+app.get('/stream', function(req, res) {
+    console.log("Stream Start");
+    res.set({'Content-Type':'audio/wav'});
+    if (ps != null) ps.kill();
+    ps = spawn('arecord', ['-D', 'dmic_sv', '-c2', '-r', '48000', '-f', 'S32_LE', '-t', 'wav', '-V', 'stereo']);
+    ps.stderr.pipe(process.stdout);
+    ps.stdout.pipe(res);
 });
