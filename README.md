@@ -55,6 +55,15 @@ Das geht am Besten unter Linux
 dd if=/dev/sdb | gzip > backup.img.gz
 ```
 
+# NodeJS
+
+Installation als `root` von https://github.com/nodesource/distributions#debinstall:
+
+```
+curl -sL https://deb.nodesource.com/setup_13.x | bash -
+apt install -y nodejs
+```
+
 # Mikrofonboard von Adafruit
 
 Nach der Anleitung von [Adafruit](https://learn.adafruit.com/adafruit-i2s-mems-microphone-breakout/raspberry-pi-wiring-and-test) wird momentan nur der Raspi 3 brauchbar unterstützt. Mit dem 4er habe ich es nicht hinbekommen.
