@@ -16,7 +16,7 @@ function startstream(url, imgid) {
       if (!response.body) {
           throw Error('ReadableStream not yet supported in this browser.')
       }
-      
+
       const reader = response.body.getReader();
 
       let headers = '';
@@ -27,23 +27,23 @@ function startstream(url, imgid) {
 
       // calculating fps. This is pretty lame. Should probably implement a floating window function.
       let frames = 0;
-      
+
       setInterval(() => {
           console.log("fps : " + frames);
           frames = 0;
-      }, 1000) 
+      }, 1000);
 
 
       const read = () => {
 
           reader.read().then(({done, value}) => {
               if (done) {
-                  controller.close();
+//                  controller.close();
                   return;
               }
-              
+
               for (let index =0; index < value.length; index++) {
-                  
+
                   // we've found start of the frame. Everything we've read till now is the header.
                   if (value[index] === SOI[0] && value[index+1] === SOI[1]) {
                       // console.log('header found : ' + newHeader);
@@ -75,9 +75,9 @@ function startstream(url, imgid) {
               console.error(error);
           })
       }
-      
+
       read();
-      
+
   }).catch(error => {
       console.error(error);
   })

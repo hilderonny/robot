@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script src="mjpegstream.js"></script>
   <body>
-    <audio controls>
-      <source src="/stream" type="audio/wav"/>
-    </audio>
+    <img id="image" />
+    <button onclick="startstream('/mjpeg', 'image');">Start</button>
   </body>
 </html>

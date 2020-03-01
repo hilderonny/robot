@@ -56,9 +56,24 @@ p2j.on('jpeg', function(jpeg) {
 });
 
 const ffmpeg = spawn('ffmpeg', params, {stdio : ['ignore', 'pipe', 'ignore']});
+
 ffmpeg.stdout.pipe(p2j);
 
 app.get('/stillimage', function(req, res) {
   res.set({'Content-Type':'image/jpeg'});
   res.send(lastImage);
+});
+
+
+app.get('/mjpeg', function(req, res) {
+  res.setHeader('Content-Type', 'multipart/x-mixed-replace;boundary=Ba4oTvQMY8ew04N8dcnM');
+  res.setHeader('Connection', 'close');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Expires', -1);
+  res.setHeader('Max-Age', 0);
+
+  ffmpeg.stdout.pipe(res);
+
 });

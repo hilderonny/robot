@@ -8,8 +8,13 @@ const params = [
     '-v',
     'verbose',
     '-re',
+
+    '-f',
+    'lavfi',
+
     '-i',
     'testsrc=size=1920x1080:rate=15',
+
     '-c:v',
     'libx264',
     '-b:v',
@@ -49,4 +54,5 @@ server.listen(443, function() {
   console.log('Running.');
 });
 
-spawn('ffmpeg', params, {stdio : ['ignore', 'pipe', 'ignore']});
+spawn('ffmpeg', params);
+
