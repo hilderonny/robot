@@ -81,10 +81,26 @@ Bis zu einer Verstärkung von 57 geht alsamixer mit, danach fängt die Aufnahme 
 
 ## Audio und Video streamen
 
-Das ist im Prinzip recht einfach, indem per NodeJS (siehe Projekt in diesem Verzeichnis)
-arecord als Prozess aufgerufen und dessen Ausgabe direkt über eine URL gestreamt wird.
-Im Browser wird dann einfach ein `audio` - Tag eingefügt, dessen src direkt auf diese URL zeigt.
+Das ist im Prinzip recht einfach, indem per NodeJS (siehe Projekt in diesem Verzeichnis) arecord als Prozess aufgerufen und dessen Ausgabe direkt über eine URL gestreamt wird. Im Browser wird dann einfach ein `audio` - Tag eingefügt, dessen src direkt auf diese URL zeigt.
 
 ```
 npm install
+node eindex.js
+```
 
+Als Ansatz habe ich diese Quellen hier verwendet:
+
+* https://stackoverflow.com/questions/28193491/node-js-streams-audio-only-when-alsas-arecord-stops-recording
+* https://github.com/vincentsaluzzo/node-microphone/blob/master/index.js
+* http://www.jingpingji.com/blog/2015/8/4/transferring-sound-data-with-binaryjs-and-buffering-for-smooth-playbac
+* https://stackoverflow.com/a/26029102
+
+Allerdings scheint es ab und an zu Overruns zu kommen, die sich in kurzen Unterbrechungen äußern. Das erscheint dann auf der Konsole:
+
+```
+Recording WAVE 'stdin' : Signed 32 bit Little Endian, Rate 48000 Hz, Stereo
++################ 51%|58%####################+ overrun!!! (at least 1187.471 ms long)
++################ 51%|58%####################+ overrun!!! (at least 40.356 ms long)
+```
+
+Möglicherweise liegt das daran, dass nicht schnell genug gestreamt wird. Eventuell mal mit Komprimierung wie [hier demonstriert](https://github.com/vincentsaluzzo/node-microphone/blob/master/index.js) probieren.
