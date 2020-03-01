@@ -15,7 +15,13 @@ Ich versuche das erst mal nach [dieser Anleitung](https://www.npmjs.com/package/
 * https://www.npmjs.com/package/pipe2jpeg
 * https://github.com/grinkus/mjpeg-stream-server/blob/master/index.js
 
+Ausgabe von `ffmpeg -f v4l2 -list_formats all -i /dev/video0`:
 
 ```
-
+[video4linux2,v4l2 @ 0x21201c0] Compressed:       mjpeg :          Motion-JPEG : 1600x1200 2592x1944 2048x1536 1920x1080 1280x1024 1280x720 1024x768 800x600 640x480 1600x1200
+[video4linux2,v4l2 @ 0x21201c0] Raw       :     yuyv422 :           YUYV 4:2:2 : 1600x1200 2592x1944 2048x1536 1920x1080 1280x1024 1280x720 1024x768 800x600 640x480 1600x1200
 ```
+
+Hier noch ein paar Hinweise von Twitch zum Thema ffmpeg:
+
+https://blog.twitch.tv/en/2017/10/10/live-video-transmuxing-transcoding-f-fmpeg-vs-twitch-transcoder-part-i-489c1c125f28/
