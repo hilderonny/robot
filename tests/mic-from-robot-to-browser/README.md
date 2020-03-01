@@ -3,10 +3,10 @@
 ## Voraussetzungen
 
 * Raspberry PI 3
-* Rasbian Buster Image
-* Netzwerk einrichten
-* NodeJS
-* Bindung an Port 443 erlauben
+* [Rasbian Buster Image](../../docs/README.md#Rasbian-installieren)
+* [Netzwerk einrichten](../../docs/README.md#Netzwerk-einrichten)
+* [NodeJS](../../docs/README.md#NodeJS-installieren)
+* [Bindung an Port 443 erlauben](../../docs/README.md#Bindung-an-Port-443-erlauben)
 
 ## Mikrofonboard von Adafruit
 
