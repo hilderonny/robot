@@ -1,4 +1,4 @@
-# Mikrofon vom Roboter zum Browser streamen
+# Video vom Roboter zum Browser streamen
 
 ## Voraussetzungen
 
@@ -25,3 +25,13 @@ Ausgabe von `ffmpeg -f v4l2 -list_formats all -i /dev/video0`:
 Hier noch ein paar Hinweise von Twitch zum Thema ffmpeg:
 
 https://blog.twitch.tv/en/2017/10/10/live-video-transmuxing-transcoding-f-fmpeg-vs-twitch-transcoder-part-i-489c1c125f28/
+
+## HLS
+
+Mit `/hlstest.js` und `public/hlstest.html` habe ich versucht, einen HLS Stream zu produzieren. Allerdings puffert dieser derart lang, dass diese Art zu Streamen nicht in Frage kommt. Zusätzlich müllt mir diese Lösung die Speicherplatz mit TS-Dateien voll. Auf dem PI3 habe ich mit `top` eine CPU-Last von 175%.
+
+## JPEG Polling
+
+Mit `/jpegtest.js` und `public/jpegtest.html` geht zumindest das Streamen recht flüssig. Die Qualität und Auflösung ist nicht sonderlich berauschend. Jedes Bild ist etwa 30kB groß und es funktioniert mit 10 FPS. Allerdings habe ich auch hier eine Latenz von einer halben Sekunde. Die CPU-Last auf dem Raspberry PI 3 beträgt ungefähr 60%, da ist also noch Luft für andere Tätigkeiten.
+
+TODO: Ich werde nochmal versuchen, mit Python MJPEG zu streame´n. Beim Polling kann ich ja ohne Weiteres auf andere Ports zugreifen, sodass ich NodeJS und Python parallel laufen lassen kann.
