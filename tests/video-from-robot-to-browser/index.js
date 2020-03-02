@@ -1,5 +1,8 @@
-var express = require('express'); var https = require('https'); var fs = require('fs'); var spawn = 
-require('child_process').spawn; var P2J = require('pipe2jpeg');
+var express = require('express');
+var https = require('https');
+var fs = require('fs');
+var spawn = require('child_process').spawn;
+var P2J = require('pipe2jpeg');
 
 const params = [
     '-v',
