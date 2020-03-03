@@ -34,4 +34,15 @@ Mit `/hlstest.js` und `public/hlstest.html` habe ich versucht, einen HLS Stream 
 
 Mit `/jpegtest.js` und `public/jpegtest.html` geht zumindest das Streamen recht flüssig. Die Qualität und Auflösung ist nicht sonderlich berauschend. Jedes Bild ist etwa 30kB groß und es funktioniert mit 10 FPS. Allerdings habe ich auch hier eine Latenz von einer halben Sekunde. Die CPU-Last auf dem Raspberry PI 3 beträgt ungefähr 60%, da ist also noch Luft für andere Tätigkeiten.
 
-TODO: Ich werde nochmal versuchen, mit Python MJPEG zu streame´n. Beim Polling kann ich ja ohne Weiteres auf andere Ports zugreifen, sodass ich NodeJS und Python parallel laufen lassen kann.
+## Python mit OpenCV
+
+Die Quellen unter `pi2` habe ich nochmal ausprobiert. Wenn ich die Auflösung im `camserver.py` auf 640x480 setze und die JPEG-Qualität auf 25%, bekomme ich eine nahezu latenzfreie Übertragung.
+
+Es geht auch, wenn ich die Auflösung auf 800x600 und die Qualität auf 10% runterschraube. Das scheint dann mit der Übertragungsrate über das Netz zusammen zu hängen.
+
+## TODO
+Als nächstes werde ich mal versuchen, die Auflösung generell auf 1024x768 zu setzen, dabei aber nur den sichtbaren Teil eus dem Bild ausschneiden und dann sehen, wie weit ich mit der Qualität hochgehen kann, ohne dass es ruckelt oder laggt. Danach probiere ich diese Vorgehensweise nochmal mit dem PI 4 aus.
+
+Dann kann ich nämlich den Videokram auch auf einen anderen PI auslagern und sogar auf einem anderen Port (8080) wegen der SU-Rechte laufen lassen. Zusätzlich braucht das Videostreamen keine gesicherte Verbindung. Das bedeutet, dass die Übertragung per reinem HTTP nochmal etwas Performance Gewinn bringen kann.
+
+Zu guter Letzt probiere ich nochmal die Performance-Hinweise von hier: https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
