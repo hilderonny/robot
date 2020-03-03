@@ -40,8 +40,14 @@ Die Quellen unter `pi2` habe ich nochmal ausprobiert. Wenn ich die Auflösung im
 
 Es geht auch, wenn ich die Auflösung auf 800x600 und die Qualität auf 10% runterschraube. Das scheint dann mit der Übertragungsrate über das Netz zusammen zu hängen.
 
+Wenn ich bei 800x600 nur den sichtbaren Bereich ausschneide, kann ich auch mit 50% Komprimierung übertragen.
+
+* X: 134 - 625
+* Y: 157 - 492
+
 ## TODO
-Als nächstes werde ich mal versuchen, die Auflösung generell auf 1024x768 zu setzen, dabei aber nur den sichtbaren Teil eus dem Bild ausschneiden und dann sehen, wie weit ich mit der Qualität hochgehen kann, ohne dass es ruckelt oder laggt. Danach probiere ich diese Vorgehensweise nochmal mit dem PI 4 aus.
+
+Ich probiere das Ganze nochmal mit dem PI 4 aus. Eventuell kann ich da mit der Auflösung oder Komprimierung noch rumspielen. Aber dazu muss ich den PI4 nochmal neu aufsetzen.
 
 Dann kann ich nämlich den Videokram auch auf einen anderen PI auslagern und sogar auf einem anderen Port (8080) wegen der SU-Rechte laufen lassen. Zusätzlich braucht das Videostreamen keine gesicherte Verbindung. Das bedeutet, dass die Übertragung per reinem HTTP nochmal etwas Performance Gewinn bringen kann.
 
