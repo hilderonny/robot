@@ -7,8 +7,6 @@
     <body>
         <button onclick="startrecording()">Start recording</button>
         <img src="http://192.168.178.70:8080/video_feed"/>
-        <audio controls autoplay>
-            <source src="/stream" type="audio/wav" />
-          </audio>
+        <audio controls src="/stream" type="audio/wav" preload="none"></audio>
     </body>
 </html>

@@ -1,6 +1,7 @@
 import cv2
 from flask import Flask, render_template, Response
 import sys
+import time
 
 class VideoCamera(object):
 
@@ -13,6 +14,7 @@ class VideoCamera(object):
         self.rp = self.w - 175
         self.bp = self.h - 108
         self.video = cv2.VideoCapture(-1)
+        print self.video
         self.video.set(3,self.w)
         self.video.set(4,self.h)
     

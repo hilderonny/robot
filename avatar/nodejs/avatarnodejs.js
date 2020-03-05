@@ -56,7 +56,7 @@ app.get('/stream', function(_, res) {
     }
     console.log("Stream Start");
     res.set({'Content-Type':'audio/wav'});
-    ps = spawn('arecord', ['-D', 'dmic_sv', '-c2', '-r', '48000', '-f', 'S32_LE', '-t', 'wav', '-V', 'stereo']);
+    ps = spawn('arecord', ['-D', 'dmic_sv', '-c2', '-f', 'S32_LE']);
     ps.stderr.pipe(process.stdout);
     ps.stdout.pipe(res);
 });

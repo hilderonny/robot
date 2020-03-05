@@ -13,6 +13,16 @@ Als Technologien verwende ich:
 
 Die Installation auf ein frisches System kann mit `sudo ./install.sh` aus diesem Verzeichnis erfolgen.
 
+## Status 05.03.2020
+
+Mit https://192.168.178.70 geht zumindest mal die Kamera- und Tonaufnahme. Auch die Lautsprecherausgabe geht. ABER:
+
+Allerdings hat die Tonaufnahme eine Verzögerung von etwa 2 Sekunden, was wohl am Browser-Puffern liegt.
+
+Wenn ich den Ton vom Browser zum Server mit 48kHz schicke, fängt das Video an, zu laggen.
+Ist also alles in allem keine besonders performante Lösung. Auch die Tatsache, dass die Kameraauflösung bescheiden ist.
+
+Nächster Versuch: Doch wieder einen Laptop nehmen und mit WebRTC eine Direktverbindung aufbauen. Aber wie binde ich dann die Mikrofone ein? Ein Stereo-USB-Mikrofon mit angelöteten Elementen?
 
 
 
