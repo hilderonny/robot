@@ -1,5 +1,23 @@
 # Avatar
 
+Hier baue ich eine Avatar-ähnliche Fernsteuerung für den InMoov Roboter.
+
+Das Kamera-Auge und die Stereomikrofone in den Ohren werden an den Client-Browser gesendet und in die andere Richtung werden die Tonaufnahmen vom Browser durch den Lautsprecher im Mund ausgegeben. Schlussendlich werden die beiden Kopfmotoren gesteuert.
+
+Als Technologien verwende ich:
+
+* Kamerafeed (/python) - Python, OpenCV, multipart-JPEG Stream über HTTP an `img` Tag (kein HTTP**S**)
+* Mikrofone (/nodejs) - NodeJS, arecord, WAV Stream über HTTP an `audio` Tag (auch kein HTTP**S**)
+* Tonausgabe (/nodejs) - NodeJS, BinaryJS, WebSockets über HTTP**S**
+* Motorensteuerung (/nodejs) - NODEJS, WebSockets über HTTP**S**
+
+Die Installation auf ein frisches System kann mit `sudo ./install.sh` aus diesem Verzeichnis erfolgen.
+
+
+
+
+# ALT
+
 Fernsteuerung für Roboter mit Video- und Audiofeed vom Roboter zum Client und Audiofeed vom Client zum Roboter. Ausserdem werden Kopfbewegungen gesteuert.
 
 ## Prinzipien

@@ -19,7 +19,7 @@ server.listen(443, function() {
     console.log('Running.');
 });
 
-var ps;
+var ps = false;
 
 app.get('/stream', function(req, res) {
     if (ps) {
