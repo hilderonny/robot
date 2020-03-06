@@ -13,6 +13,26 @@ Als Technologien verwende ich:
 
 Die Installation auf ein frisches System kann mit `sudo ./install.sh` aus diesem Verzeichnis erfolgen.
 
+## Status 06.03.2020
+
+Mit dem PI 4 habe ich nun endlich ein Erfolgserlebnis.
+
+Ich habe darauf Rasbian installiert, dieses im Desktop-Modus laufen lassen und chromium automatisch simplewebrtc öffnen lassen.
+
+1. Raspbian Buster Image laden
+2. Datei **ssh** anlegen
+3. Datei **wpa_supplicant.conf** anlegen
+4. Per SSH darauf verbinden und `raspi-config` aufrufen
+    * VNC Server aktivieren
+    * Auflösung auf 1024x768 festlegen
+    * Boot im Desktop-Modus mit automatischer Anmeldung als **pi**
+5. Mit RealVNC verbinden und automatische Konfiguration durchlaufen lassen (dabei erden Updates installiert)
+6. Nach [diesem Blog](https://christian-brauweiler.de/autostart-unter-raspbian/) chromium-Autostart anlegen
+    * `Exec=chromium-browser --force-device-scale-factor=1.00 "https://simplevideochat.glitch.me/webrtcdemo.html"
+7. simplevideochat einmal per VNC aufrufen und Kameraberechtigung vergeben
+8. PI neu starten
+9. Per Laptop simplevideochat aufrufen. Verbindung mit PI sollte nach einiger Zeit klappen.
+
 ## Status 05.03.2020
 
 Mit https://192.168.178.70 geht zumindest mal die Kamera- und Tonaufnahme. Auch die Lautsprecherausgabe geht. ABER:
