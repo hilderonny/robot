@@ -19,12 +19,15 @@ server.listen(443, function() {
     console.log('Running.');
 });
 
-var ps = null;
+var ps = false;
 
 app.get('/stream', function(req, res) {
+    if (ps) {
+        console.log('Killing previous recording');
+        ps.kill();
+    }
     console.log("Stream Start");
     res.set({'Content-Type':'audio/wav'});
-    if (ps != null) ps.kill();
     ps = spawn('arecord', ['-D', 'dmic_sv', '-c2', '-r', '48000', '-f', 'S32_LE', '-t', 'wav', '-V', 'stereo']);
     ps.stderr.pipe(process.stdout);
     ps.stdout.pipe(res);

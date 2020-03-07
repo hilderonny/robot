@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var imgtag, interval;
+
+        function loadimage() {
+            imgtag.src = '/image?t=' + Date.now();
+        }
+
+        function start() {
+            interval = setInterval(loadimage, 100);
+        }
+
+        function stop() {
+            if (interval) clearInterval(interval);
+        }
+
+        window.addEventListener('load', function() {
+            imgtag = document.getElementById('image');
+        });
+    </script>
+</head>
+<body>
+    <button onclick="start();">Start</button>
+    <button onclick="stop();">Stop</button>
+    <div><img id="image"/></div>
+</body>
+</html>

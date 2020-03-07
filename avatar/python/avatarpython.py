@@ -1,10 +1,8 @@
 import cv2
 from flask import Flask, render_template, Response
 import sys
-import time
 
 class VideoCamera(object):
-
 
     def __init__(self):
         self.w = 800
@@ -14,7 +12,6 @@ class VideoCamera(object):
         self.rp = self.w - 175
         self.bp = self.h - 108
         self.video = cv2.VideoCapture(-1)
-        print self.video
         self.video.set(3,self.w)
         self.video.set(4,self.h)
     
@@ -28,14 +25,6 @@ class VideoCamera(object):
         return jpeg.tostring()
 
 app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/test/')
-def test():
-    return render_template('test.html')
 
 def gen(camera):
     while True:
