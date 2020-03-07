@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<!-- Wird vom Roboter gestartet. Wartet auf Verbindung und streamt Video und Audio -->
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="webrtc.js"></script>
+        <script>
+            window.addEventListener('load', function() {
+                var rtc = new WebRTC({ audio: true, video: true}, true);
+                rtc.setLocalClientName('J.A.R.V.I.S.');
+            });
+        </script>
+    </head>
+</html>

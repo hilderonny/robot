@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="binary.js"></script>
-        <script src="recordaudio.js"></script>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="webrtc.js"></script>
+        <script src="clientapp.js"></script>
     </head>
     <body>
-        <button onclick="startrecording()">Start recording</button>
+        <h4>Local name</h4>
+        <input id="localName" onkeyup="updateLocalName(this);" />
+        <h4>Client list</h4>
+        <div id="clientList"></div>
+        <video id="localVideo" autoplay></video>
+        <div id="remoteVideos"></div>
     </body>
 </html>
