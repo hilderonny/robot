@@ -6,11 +6,17 @@
         <script src="webrtc.js"></script>
         <script>
             window.addEventListener('load', function() {
-                var rtc = new WebRTC({ audio: {
-                    "sampleSize": 16,
-                    "channelCount": 2,
-                    "echoCancellation": false
-                }, video: true}, true);
+		var constraints = {
+			audio:{
+				optional:[],
+				mandatory:{
+					echoCancellation:false
+				}
+			},
+			video: true
+		};
+
+                var rtc = new WebRTC(constraints, true);
                 rtc.setLocalClientName('J.A.R.V.I.S.');
             });
         </script>
