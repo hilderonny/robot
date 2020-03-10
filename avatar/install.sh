@@ -5,6 +5,14 @@ apt install libasound2-dev python-pip python-opencv
 curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
 apt install -y nodejs
 
+# Pavucontrol dient zum Einstellen der Eingangspegel für das Stereomikrofon
+
+# Nach dem Anstecken des Mikrofons noch die Firmwares aktualisieren und Audio-Einstellungsprogramm installieren
+# https://askubuntu.com/questions/879037/pavucontrol-stuck-at-establishing-connection-to-pulseaudio-please-wait
+apt update
+apt upgrade
+
+
 # Python-Dienst für Kamera und Mikrofone (Port 80)
 cat > /etc/systemd/system/avatarpython.service << EOM
 [Unit]
