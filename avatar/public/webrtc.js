@@ -462,6 +462,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
 
     // Lokales Video initialisieren, sendet Event 'localStream' und startet Thumbnail Erstellung
     navigator.mediaDevices.getUserMedia(localMediaProperties).then(function(stream) {
+        console.log(stream);
         Object.keys(self.connections).forEach(function(connectionId) {
             self.connections[connectionId].addLocalStream(stream);
         });
