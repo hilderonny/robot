@@ -33,6 +33,12 @@ Ich habe darauf Rasbian installiert, dieses im Desktop-Modus laufen lassen und c
 8. PI neu starten
 9. Per Laptop simplevideochat aufrufen. Verbindung mit PI sollte nach einiger Zeit klappen.
 
+## Status 10.03.2020
+
+Mit dem USB Stereomikrofon geht das Ganze erst mal ganz gut. Allerdings bekomme ich das derzeit nur in Mono hin. Mit [AppRTC](https://github.com/webrtc/apprtc) scheint das aber auch in Stereo zu gehen, wenn man als URL-Parameter https://appr.tc/r/hilderonny?stereo=true&audio=echoCancellation=false angibt.
+
+Dort werden allerdings SDP-Parameter verwendet, die eine noch genauere Stream-Konfiguration ermöglichen. Da sollte ich als Nächstes ansetzen.
+
 ## Status 05.03.2020
 
 Mit https://192.168.178.70 geht zumindest mal die Kamera- und Tonaufnahme. Auch die Lautsprecherausgabe geht. ABER:
