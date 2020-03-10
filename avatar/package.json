@@ -1,10 +1,8 @@
 {
   "name": "avatar",
   "version": "2.0.0",
-  "description": "Fernsteuerung für Roboter mit Video- und Audiofeed vom Roboter zum Client und Audiofeed vom Client zum Roboter. Ausserdem werden Kopfbewegungen gesteuert.",
   "main": "index.js",
   "author": "Ronny Hildebrandt",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.15.4",
     "https": "^1.0.0",

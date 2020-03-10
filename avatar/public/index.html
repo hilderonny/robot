@@ -7,8 +7,11 @@
         <script src="clientapp.js"></script>
     </head>
     <body>
-        <button onclick="startrecording()">Start recording</button>
-        <img src="http://192.168.178.70:8080/video_feed"/>
-        <audio controls src="/stream" type="audio/wav" preload="none"></audio>
+        <h4>Local name</h4>
+        <input id="localName" onkeyup="updateLocalName(this);" />
+        <h4>Client list</h4>
+        <div id="clientList"></div>
+        <video id="localVideo" autoplay></video>
+        <div id="remoteVideos"></div>
     </body>
 </html>

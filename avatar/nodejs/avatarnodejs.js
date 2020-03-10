@@ -6,9 +6,8 @@ var binaryjs = require('binaryjs');
 var speaker = require('speaker');
 var spawn = require('child_process').spawn;
 
-// Express application
 var app = express();
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public')); // Serve HTML files from ./public directory
 
 // HTTP Server
 http.createServer(options, app).listen(80, function() {
@@ -37,13 +36,31 @@ binaryServer.on('connection', function(client) {
             bitDepth: 16,
             sampleRate: meta.sampleRate
         });
-        stream.pipe(spk);
     });
-    client.on('close', function() {
-        if ( spk != null ) {
-            spk.close();
+    // Handle incoming messages with tag "Message"
+    socket.on('Message', (message) => {
+        message.from = socket.id;
+        if (message.type === 'WebRTCclientName') {
+            socket.name = message.content;
         }
-        console.log("Connection Closed");
+        if (message.to) { // Direct message to other peer
+            sockets[message.to].emit('Message', message);
+            console.log(`Sent message type "${message.type}" from ${message.from} to ${message.to}`);
+        } else { // Broadcast message
+            socket.broadcast.emit('Message', message);
+            console.log(`Sent message type "${message.type}" from ${message.from} to all other`);
+        }
+    });
+    console.log(`Socket ${socket.id} connected.`);
+    socket.broadcast.emit('Message', { // Inform all other peers about new connection
+        type: 'WebRTCclientConnected',
+        content: socket.id
+    });
+    socket.emit('Message', { // Send list of already connected clients to new peer
+        type: 'WebRTCclientList',
+        content: Object.keys(sockets).filter((id) => id !== socket.id).map((id) => {
+            return { id: id, name: sockets[id].name }
+        })
     });
 });
 
