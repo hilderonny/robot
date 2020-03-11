@@ -16,7 +16,7 @@
                 };
                 var jarvisid = false, ready = false;
 
-                var rtc = new WebRTC(constraints, true);
+                var rtc = new WebRTC(constraints, true, true);
                 rtc.on('clientList', function(newClientList) {
                     Object.values(newClientList).forEach((client) => {
                         if (client.name === 'J.A.R.V.I.S.') {

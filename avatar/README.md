@@ -37,7 +37,11 @@ Außerdem muss als Constraints in server.html die Echo-Unterdrückung abgeschalt
 {"audio":{"optional":[],"mandatory":{"echoCancellation":"false"}},"video":{"optional":[{"minWidth":"1280"},{"minHeight":"720"}],"mandatory":{}}}
 ```
 
-Allerdings habe ich momentan noch ein Feedback sowohl am Client als auch am Server. Dort werden jeweils die Mic-Streams auch am lokalen Lautsprecher ausgegeben. Bei AppRTC ist das nicht so.
+Allerdings habe ich momentan noch ein Feedback sowohl am Client als auch am Server. Dort werden jeweils die Mic-Streams auch am lokalen Lautsprecher ausgegeben. Bei AppRTC ist das nicht so. Das lag daran, dass für die Thumbnails das lokale Video in einem versteckten Video-Tag angezeigt wurde.
+
+Der Stream vom Client zum Server muss in ein video-Tag im Server ausgegeben werden, damit man am Roboter Ton hört. Allerdings wird beim Stream-Empfang der Video-Track rausgeschnitten, damit man Performance auf dem Roboter spart.
+
+Der Video-Track wird nach Akzeptieren der Verbinsund sowohl am Client (Sender) als auch auf dem Server (Receiver) aus dem Stream entfernt, um Traffic und Performance zu sparen.
 
 ## Status 06.03.2020
 

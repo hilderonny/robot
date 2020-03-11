@@ -158,7 +158,7 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
  *      rtc.setLocalClientName('Mein Eigener Name');
  *      rtc.call(clientList[0].id); // Erst, nachdem die Liste gefüllt wurde
  */
-function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
+function WebRTC(localMediaProperties, autoAcceptIncomingCall, sendaudioonly) {
 
     var self = this;
 
@@ -357,6 +357,10 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
+        }
+        // Lokalen Video-Track rausschneiden, wenn nur Audio übertragen werden soll. Das spart Traffic und Performance
+        if (sendaudioonly) {
+            self.localMediaStream.getVideoTracks().forEach((t) => { self.localMediaStream.removeTrack(t); });
         }
         connection.setRemoteSessionDescription(remoteSessionDescription);
         self.sendEvent('outgoingCallAccepted', connection);
