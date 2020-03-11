@@ -10,9 +10,6 @@
                     audio: {
                         optional: [],
                         mandatory: {
-                            googAutoGainControl: false,
-                            googAutoGainControl2: false,
-                            googAudioMirroring: false,
                             echoCancellation: false
                         }
                     },
@@ -20,7 +17,17 @@
                 };
                 var rtc = new WebRTC(constraints, true);
                 rtc.setLocalClientName('J.A.R.V.I.S.');
+                rtc.on('remoteStream', function(event) {
+                    var videoTag = document.createElement('video');
+                    videoTag.setAttribute('autoplay', 'autoplay');
+                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    videoTag.srcObject = event.stream;
+                });
+
             });
         </script>
     </head>
+    <body>
+        <div id="remoteVideos"></div>
+    </body>
 </html>

@@ -56,9 +56,6 @@ window.onload = function() {
         audio: {
             optional: [],
             mandatory: {
-                googAutoGainControl: false,
-                googAutoGainControl2: false,
-                googAudioMirroring: false,
                 echoCancellation: false
             }
         },
