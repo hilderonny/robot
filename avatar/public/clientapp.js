@@ -54,7 +54,6 @@ window.onload = function() {
 
     var constraints = {
         audio: {
-            optional: [],
             mandatory: {
                 echoCancellation: false
             }

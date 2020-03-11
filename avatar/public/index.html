@@ -4,14 +4,42 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <script src="/socket.io/socket.io.js"></script>
         <script src="webrtc.js"></script>
-        <script src="clientapp.js"></script>
+        <script>
+            window.addEventListener('load', function() {
+                var constraints = {
+                    audio: {
+                        mandatory: {
+                            echoCancellation: false
+                        }
+                    },
+                    video: true
+                };
+                var jarvisid = false, ready = false;
+
+                var rtc = new WebRTC(constraints, true);
+                rtc.on('clientList', function(newClientList) {
+                    Object.values(newClientList).forEach((client) => {
+                        if (client.name === 'J.A.R.V.I.S.') {
+                            jarvisid = client.id;
+                            if (ready) rtc.call(jarvisid);
+                        }
+                    });
+                });
+                rtc.on('localStream', function() {
+                    ready = true;
+                    if (jarvisid) rtc.call(jarvisid);
+                });
+                rtc.on('remoteStream', function(event) {
+                    var videoTag = document.createElement('video');
+                    videoTag.setAttribute('autoplay', 'autoplay');
+                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    videoTag.srcObject = event.stream;
+                });
+
+            });
+        </script>
     </head>
     <body>
-        <h4>Local name</h4>
-        <input id="localName" onkeyup="updateLocalName(this);" />
-        <h4>Client list</h4>
-        <div id="clientList"></div>
-        <video id="localVideo" autoplay></video>
         <div id="remoteVideos"></div>
     </body>
 </html>
