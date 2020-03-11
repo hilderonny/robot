@@ -69,19 +69,17 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
     /**
      * Verbindungsanfrage von Gegenstelle annehmen und Antwort zurück schicken
      */
-    self.accept = function(done) {
-        self.peerConnection.createAnswer().then(function(localSessionDescription) {
-            // Stereo auf Serverseite aktivieren. Das ist der einzige, der Anfragen beantwortet.
-            localSessionDescription.sdp = localSessionDescription.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1');
-//            console.log(localSessionDescription.sdp);
-            self.peerConnection.setLocalDescription(localSessionDescription);
-            self.socket.emit('Message', {
-                to: self.remoteClientId,
-                type: 'WebRTCaccept',
-                content: { connectionId: self.id, sessionDescription: localSessionDescription }
-            });
-            if (done) done();
+    self.accept = async function(done) {
+        var answerSessionDescription = await self.peerConnection.createAnswer();
+        // Stereo auf Serverseite aktivieren. Das ist der einzige, der Anfragen beantwortet.
+        answerSessionDescription.sdp = answerSessionDescription.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1');
+        self.peerConnection.setLocalDescription(answerSessionDescription);
+        self.socket.emit('Message', {
+            to: self.remoteClientId,
+            type: 'WebRTCaccept',
+            content: { connectionId: self.id, sessionDescription: answerSessionDescription }
         });
+        if (done) done();
     };
 
     // Lehnt die eingehende Verbindung ab und schließt diese

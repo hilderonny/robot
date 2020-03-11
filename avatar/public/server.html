@@ -17,10 +17,12 @@
                 var rtc = new WebRTC(constraints, true);
                 rtc.setLocalClientName('J.A.R.V.I.S.');
                 rtc.on('remoteStream', function(event) {
+                    var stream = event.stream;
+                    stream.getVideoTracks().forEach((t) => { stream.removeTrack(t); });
                     var videoTag = document.createElement('video');
                     videoTag.setAttribute('autoplay', 'autoplay');
                     document.getElementById('remoteVideos').appendChild(videoTag);
-                    videoTag.srcObject = event.stream;
+                    videoTag.srcObject = stream;
                 });
 
             });
