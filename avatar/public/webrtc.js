@@ -226,6 +226,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * 'clientConnected' Event.
      */
     self.addRemoteClient = function(remoteClientId) {
+        console.log('addRemoteClient:', remoteClientId);
         var newClient = { id : remoteClientId };
         self.remoteClients[remoteClientId] = newClient;
         self.sendEvent('clientConnected', newClient);
@@ -237,6 +238,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * und 'clientDisconnected'.
      */
     self.removeRemoteClient = function(remoteClientId) {
+        console.log('removeRemoteClient:', remoteClientId);
         // Eventuell bestehende Verbindungen schließen
         if (self.connections[remoteClientId]) {
             self.connections[remoteClientId].forEach(function(connection) {
@@ -258,6 +260,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * getriggert. Sendet Event 'clientList'.
      */
     self.handleClientListFromServer = function(clientListFromServer) {
+        console.log('handleClientListFromServer:', clientListFromServer);
         clientListFromServer.forEach(function(clientFromServer) {
             // Bereits bekannte Clients werden nich verarbeitet
             if (self.remoteClients[clientFromServer.id]) {
@@ -272,6 +275,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Aktualisiert den Namen eines Clients und sendet das Event 'clientChanged'.
      */
     self.handleNewClientName = function(remoteClientId, newClientName) {
+        console.log('handleNewClientName:', remoteClientId, newClientName);
         var remoteClient = self.remoteClients[remoteClientId];
         if (!remoteClient) {
             return;
@@ -284,6 +288,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Schickt den Namen als neuen Namen des lokalen Clients an den Server
      */
     self.setLocalClientName = function(newLocalClientName) {
+        console.log('setLocalClientName:', newLocalClientName);
         self.socket.emit('Message', {
             type: 'WebRTCclientName',
             content: newLocalClientName
@@ -294,6 +299,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Wird aufgerufen, wenn die Gegenstellen einen Stream geschickt hat. Event 'remoteStream'
      */
     self.handleRemoteStreamAdded = function(connection, remoteStream) {
+        console.log('handleRemoteStreamAdded:', connection, remoteStream);
         self.sendEvent('remoteStream', { connection: connection, stream : remoteStream });
     };
 
@@ -302,6 +308,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Event: 'incomingCall'
      */
     self.handleIncomingCall = function(remoteClientId, remoteConnectionId, remoteSessionDescription) {
+        console.log('handleIncomingCall:', remoteClientId, remoteConnectionId, remoteSessionDescription);
         var newConnection = new WebRTCConnection(self.socket, remoteClientId, self.handleRemoteStreamAdded);
         newConnection.id = remoteConnectionId;
         if (self.localMediaStream) {
@@ -320,6 +327,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Eingehende Verbindung annehmen und aufbauen. Event: 'incomingCallAccepted'
      */
     self.acceptIncomingCall = function(connectionId) {
+        console.log('acceptIncomingCall:', connectionId);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -333,6 +341,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Eingehende Verbindung ablehnen. Event: 'incomingCallRejected'
      */
     self.rejectIncomingCall = function(connectionId) {
+        console.log('rejectIncomingCall:', connectionId);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -346,6 +355,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Behandelt Akzeptiert-Antworten auf Verbindungsanfragen und sendet Event 'outgoingCallAccepted'
      */
     self.handleCallAccepted = function(connectionId, remoteSessionDescription) {
+        console.log('handleCallAccepted:', connectionId, remoteSessionDescription);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -358,6 +368,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Behandelt Abgelehnt-Antworten auf Verbindungsanfragen und sendet Event 'outgoingCallRejected'
      */
     self.handleCallRejected = function(connectionId) {
+        console.log('handleCallRejected:', connectionId);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -371,6 +382,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Behandelt das Auflegen von Verbindungen von remote und sendet Event 'connectionClosed'
      */
     self.handleCallClosed = function(connectionId) {
+        console.log('handleCallClosed:', connectionId);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -384,6 +396,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Verarbeitet die ICE-Kandidaten einer Gegenstelle einer Verbindung und sendet Event 'remoteIceCandidate'.
      */
     self.handleRemoteIceCandidate = function(connectionId, remoteIceCandidateDescription) {
+        console.log('handleRemoteIceCandidate:', connectionId, remoteIceCandidateDescription);
         var connection = self.connections[connectionId];
         if (!connection) {
             return;
@@ -396,6 +409,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Aktualisiert das aktuelle Thumbnail eines Clients und sendet das Event 'clientThumbnail'.
      */
     self.handleRemoteThumbnail = function(remoteClientId, imageDataUrl) {
+        console.log('handleRemoteThumbnail:', remoteClientId, imageDataUrl);
         var remoteClient = self.remoteClients[remoteClientId];
         if (!remoteClient) {
             return;
@@ -408,6 +422,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
      * Ruft eine Gegenstelle an. Event 'outgoingCall'. Ergebnis: newConnection
      */
     self.call = function(remoteClientId) {
+        console.log('call:', remoteClientId);
         var remoteClient = self.remoteClients[remoteClientId];
         if (!remoteClient) {
             return;
@@ -425,6 +440,7 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
 
     // Socket-Nachrichten behandeln
     self.socket.on('Message', function(message) {
+        console.log('Socket message:', message);
         switch(message.type) {
             case 'WebRTCclientConnected': self.addRemoteClient(message.content); break;
             case 'WebRTCclientDisconnected': self.removeRemoteClient(message.content); break;
@@ -439,45 +455,14 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall) {
         }
     });
 
-    /**
-     * Macht ein Thumbnail vom lokalen Video und sendet "localThumbnail" Ereignis
-     */
-    self.createThumbnail = function() {
-        if (!self.videoTagForThumbnail) return;
-        var canvas = document.createElement('canvas');
-        var videoWidth = self.videoTagForThumbnail.videoWidth;
-        var videoHeight = self.videoTagForThumbnail.videoHeight;
-        var factor = 160 / (videoWidth > videoHeight ? videoWidth : videoHeight);
-        var scaledWidth = videoWidth * factor;
-        var scaledHeight = videoHeight * factor; 
-        canvas.setAttribute('width', scaledWidth + 'px');
-        canvas.setAttribute('height', scaledHeight + 'px');
-        var context2D = canvas.getContext('2d');
-        context2D.drawImage(self.videoTagForThumbnail, 0, 0, scaledWidth, scaledHeight);
-        var imageDataUrl = canvas.toDataURL('image/png');
-        // Send local event
-        self.sendEvent('localThumbnail', imageDataUrl);
-        // Send Thumbnail to other Clients
-        self.socket.emit('Message', {
-            type: 'WebRTCthumbnail',
-            content: imageDataUrl
-        });
-    };
-
     // Lokales Video initialisieren, sendet Event 'localStream' und startet Thumbnail Erstellung
     navigator.mediaDevices.getUserMedia(localMediaProperties).then(function(stream) {
-        console.log(stream);
+        console.log('navigator.mediaDevices.getUserMedia:', stream);
         Object.keys(self.connections).forEach(function(connectionId) {
             self.connections[connectionId].addLocalStream(stream);
         });
         self.localMediaStream = stream;
         self.sendEvent('localStream', stream);
-        // Thumbnails vorbereiten und starten
-        self.videoTagForThumbnail = document.createElement('video');
-        self.videoTagForThumbnail.setAttribute('autoplay', 'autoplay');
-        self.videoTagForThumbnail.srcObject = stream;
-        setInterval(self.createThumbnail, 5000);
-        self.createThumbnail();
     });
 
 }
