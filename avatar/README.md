@@ -37,6 +37,8 @@ Außerdem muss als Constraints in server.html die Echo-Unterdrückung abgeschalt
 {"audio":{"optional":[],"mandatory":{"echoCancellation":"false"}},"video":{"optional":[{"minWidth":"1280"},{"minHeight":"720"}],"mandatory":{}}}
 ```
 
+Allerdings habe ich momentan noch ein Feedback sowohl am Client als auch am Server. Dort werden jeweils die Mic-Streams auch am lokalen Lautsprecher ausgegeben. Bei AppRTC ist das nicht so.
+
 ## Status 06.03.2020
 
 Mit dem PI 4 habe ich nun endlich ein Erfolgserlebnis.
