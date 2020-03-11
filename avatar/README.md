@@ -13,6 +13,30 @@ Als Technologien verwende ich:
 
 Die Installation auf ein frisches System kann mit `sudo ./install.sh` aus diesem Verzeichnis erfolgen.
 
+## Status 11.03.2020
+
+In `webrtc.js:73` muss ich die `localSessionDescription.sdp` anpassen, um das Stereomikrofon zu aktivieren.
+Da genügt es, per String replace dieses Feld zu aktualisieren.
+
+Vorher:
+```
+...
+a=fmtp:111 minptime=10;useinbandfec=1
+...
+```
+
+Nachher:
+```
+...
+a=fmtp:111 minptime=10;useinbandfec=1;stereo=1
+...
+```
+
+Außerdem muss als Constraints in server.html die Echo-Unterdrückung abgeschaltet werden:
+```
+{"audio":{"optional":[],"mandatory":{"echoCancellation":"false"}},"video":{"optional":[{"minWidth":"1280"},{"minHeight":"720"}],"mandatory":{}}}
+```
+
 ## Status 06.03.2020
 
 Mit dem PI 4 habe ich nun endlich ein Erfolgserlebnis.
