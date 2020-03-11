@@ -52,7 +52,17 @@ var removeStream = function(clientId, streamId) {
 
 window.onload = function() {
 
-    rtc = new WebRTC({ audio: true, video: true}, true);
+    var constraints = {
+        audio: {
+            optional: [],
+            mandatory: {
+                echoCancellation: false
+            }
+        },
+        video: true
+    };
+
+    rtc = new WebRTC(constraints, true);
 
     rtc.on('clientList', function(newClientList) {
         var clientListDiv = document.getElementById('clientList');

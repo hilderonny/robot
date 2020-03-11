@@ -51,6 +51,7 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
      */
     self.sendOffer = function(done) {
         self.peerConnection.createOffer().then(function(localSessionDescription) {
+            localSessionDescription.sdp = localSessionDescription.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1');
             self.peerConnection.setLocalDescription(localSessionDescription);
             self.socket.emit('Message', {
                 to: self.remoteClientId,
@@ -70,6 +71,9 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
      */
     self.accept = function(done) {
         self.peerConnection.createAnswer().then(function(localSessionDescription) {
+            // Stereo auf Serverseite aktivieren. Das ist der einzige, der Anfragen beantwortet.
+            localSessionDescription.sdp = localSessionDescription.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1');
+//            console.log(localSessionDescription.sdp);
             self.peerConnection.setLocalDescription(localSessionDescription);
             self.socket.emit('Message', {
                 to: self.remoteClientId,
