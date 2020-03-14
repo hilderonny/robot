@@ -11,6 +11,12 @@ Unterverzeichnis initialisiert. Das wird mit `install.sh` gemacht:
 * `sh /boot/install.sh *UNTERVERZEICHNIS* *SSID* *PSK*` ausführen, wobei Unterverzeichnis *pi1*, *pi2*, etc. sein kann.
 * Freuen
 
+# Verzeichnisse
+
+|Verzeichnis|Inhalt|
+|---|---|
+|avatar|Fernsteuerung á la Avatar. Diese Projekt läuft auf dem Raspberry PI 4|
+
 # Aufgaben der einzelnen Himbeeren
 
 |Knoten|IP extern|IP intern|Aufgabe|

@@ -43,6 +43,19 @@ Der Stream vom Client zum Server muss in ein video-Tag im Server ausgegeben werd
 
 Der Video-Track wird nach Akzeptieren der Verbinsund sowohl am Client (Sender) als auch auf dem Server (Receiver) aus dem Stream entfernt, um Traffic und Performance zu sparen.
 
+## Status 14.03.2020
+
+Als Nächstes kommt die Kopfsteuerung dran. Dazu werde ich eines der Servo-Boards direkt an den PI 4 anschließen. Das Board dient dann auch nur der Kopfsteuerung (links-rechts, oben-unten, Mund auf-zu und eventuell noch zwinkern) und wird vom gleichen Programm gesteuert, dass auch die Websocket-Verbindung zwischen Roboter und Clients verwaltet.
+
+* [Anleitung Servo-Board mit Raspberry](https://tutorials-raspberrypi.de/mehrere-servo-motoren-steuern-raspberry-pi-pca9685/)
+* [I2C mit NodeJS](https://www.npmjs.com/package/i2c-bus)
+
+|Steuerung|Port|I2C Adresse|
+|---|---|---|
+|Links-Rechts|0||
+|Oben-Unten|1||
+|Mund|2||
+
 ## Status 06.03.2020
 
 Mit dem PI 4 habe ich nun endlich ein Erfolgserlebnis.
