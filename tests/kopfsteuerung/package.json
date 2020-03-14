@@ -1,0 +1,8 @@
+{
+  "name": "kopfsteuerung",
+  "dependencies": {
+    "i2c-bus": "^5.1.0",
+    "keypress": "^0.2.1",
+    "pca9685": "^4.0.3"
+  }
+}
