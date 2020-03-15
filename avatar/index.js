@@ -20,6 +20,17 @@ httpsServer.listen(httpsPort, () => { // Start HTTPS server
     console.log(`HTTPS server is running at port ${httpsPort}.`);
 });
 
+// Motorensteuerung vorbereiten
+var motors = require('./motors');
+motors.init();
+
+// Limits und sowas festlegen
+var headsettings = {
+    rotation: { channel: 14, min: 800, center: 1600, max: 2500 },
+    tilt: { channel: 13, min: 800, center: 1350, max: 2100 },
+    mouth: { channel: 15, min: 1050, center: 1050, max: 1500 },
+};
+
 // List of connected sockets for direct messaging
 var sockets = {};
 // Prepare websockets and bind them to the HTTPS server
@@ -35,6 +46,21 @@ io.on('connection', (socket) => {
             type: 'WebRTCclientDisconnected',
             content: socket.id
         });
+    });
+    // Motoren zentrieren
+    socket.on('Center', () => {
+        Object.values(headsettings).forEach((setting) => {
+            motors.setPulse(setting.channel, setting.center);
+        });
+    });
+    // Handle motor steering
+    // message.key: 'rotation', 'tilt' or 'mouth'
+    // message.value: 800 .. 2500
+    // TODO: In Gradzahlen umbauen, die werden vom Headset gesendet (oder?) oder halt auf Clientseite umrechnen, ist vermutlich performanter
+    socket.on('Steer', (message)  => {
+        var value = message.value;
+        var setting = headsettings[message.key];
+        if (setting && setting.min <= value <= setting.max) motors.setPulse(setting.channel, value);
     });
     // Handle incoming messages with tag "Message"
     socket.on('Message', (message) => {
