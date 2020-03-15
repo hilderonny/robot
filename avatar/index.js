@@ -58,9 +58,11 @@ io.on('connection', (socket) => {
     // message.value: 800 .. 2500
     // TODO: In Gradzahlen umbauen, die werden vom Headset gesendet (oder?) oder halt auf Clientseite umrechnen, ist vermutlich performanter
     socket.on('Steer', (message)  => {
-        var value = message.value;
-        var setting = headsettings[message.key];
-        if (setting && setting.min <= value <= setting.max) motors.setPulse(setting.channel, value);
+        Object.keys(message).forEach((key) => {
+            var value = message[key];
+            var setting = headsettings[key];
+            if (setting && setting.min <= value <= setting.max) motors.setPulse(setting.channel, value);
+        });
     });
     // Handle incoming messages with tag "Message"
     socket.on('Message', (message) => {

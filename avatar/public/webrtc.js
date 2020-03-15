@@ -220,6 +220,13 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall, sendaudioonly) {
     };
 
     /**
+     * Sendet eine Nachricht per Websocket an den Server, der sie dann verarbeitet.
+     */
+    self.sendMessage = function(name, message) {
+        self.socket.emit(name, message);
+    };
+
+    /**
      * Fügt einen neuen Client der Liste bekannter Clients hinzu und sendet ein
      * 'clientConnected' Event.
      */

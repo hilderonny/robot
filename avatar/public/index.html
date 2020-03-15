@@ -5,6 +5,26 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="webrtc.js"></script>
         <script>
+            var rtc;
+
+            function rotate(value) {
+                var settings = { rotation: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('rotation').innerHTML = value;
+            }
+
+            function tilt(value) {
+                var settings = { tilt: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('tilt').innerHTML = value;
+            }
+
+            function mouth(value) {
+                var settings = { mouth: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('mouth').innerHTML = value;
+            }
+
             window.addEventListener('load', function() {
                 var constraints = {
                     audio: {
@@ -16,7 +36,7 @@
                 };
                 var jarvisid = false, ready = false;
 
-                var rtc = new WebRTC(constraints, true, true);
+                rtc = new WebRTC(constraints, true, true);
                 rtc.on('clientList', function(newClientList) {
                     Object.values(newClientList).forEach((client) => {
                         if (client.name === 'J.A.R.V.I.S.') {
@@ -36,10 +56,25 @@
                     videoTag.srcObject = event.stream;
                 });
 
+                // Kopf zentrieren
+                rtc.sendMessage('Center');
+
             });
         </script>
     </head>
     <body>
+        <div>
+            <p>Kopfdrehung: <span id="rotation"></span></p>
+            <p><input type="range" min="800" value="1600" max="2500" oninput="rotate(this.value);" /></p>
+        </div>
+        <div>
+            <p>Kopfneigung: <span id="tilt"></span></p>
+            <p><input type="range" min="800" value="1350" max="2100" oninput="tilt(this.value);" /></p>
+        </div>
+        <div>
+            <p>Mundöffnung: <span id="mouth"></span></p>
+            <p><input type="range" min="1050" value="1050" max="1500" oninput="mouth(this.value);" /></p>
+        </div>
         <div id="remoteVideos"></div>
     </body>
 </html>
