@@ -31,6 +31,14 @@ var headsettings = {
     mouth: { channel: 15, min: 1050, center: 1050, max: 1500 },
 };
 
+var mouthPositions = [headsettings.mouth.min, headsettings.mouth.max];
+var currentMouthPosision = 0;
+function speakInterval() {
+    currentMouthPosision = (currentMouthPosision + 1) % mouthPositions.length;
+    motors.setPulse(headsettings.mouth.channel, mouthPositions[currentMouthPosision]);
+}
+var speakIntervalPointer = null;
+
 // List of connected sockets for direct messaging
 var sockets = {};
 // Prepare websockets and bind them to the HTTPS server
@@ -64,6 +72,15 @@ io.on('connection', (socket) => {
             if (setting && setting.min <= value <= setting.max) motors.setPulse(setting.channel, value);
         });
     });
+    socket.on('StartSpeak', () => {
+        speakIntervalPointer = setInterval(speakInterval, 250);
+        speakInterval();
+    });
+    socket.on('StopSpeak', () => {
+        if (!speakIntervalPointer) return;
+        clearInterval(speakIntervalPointer);
+        motors.setPulse(headsettings.mouth.channel, headsettings.mouth.min);
+    });
     // Handle incoming messages with tag "Message"
     socket.on('Message', (message) => {
         message.from = socket.id;
@@ -71,7 +88,8 @@ io.on('connection', (socket) => {
             socket.name = message.content;
         }
         if (message.to) { // Direct message to other peer
-            sockets[message.to].emit('Message', message);
+            var s = sockets[message.to];
+            if (s) s.emit('Message', message);
             console.log(`Sent message type "${message.type}" from ${message.from} to ${message.to}`);
         } else { // Broadcast message
             socket.broadcast.emit('Message', message);

@@ -1,37 +1,37 @@
-<!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <script src="/socket.io/socket.io.js"></script>
         <script src="volumemeter.js"></script>
         <script src="webrtc.js"></script>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script>
+
             var rtc, meter;
 
-            function rotate(value) {
-                var settings = { rotation: parseInt(value) };
-                rtc.sendMessage('Steer', settings);
-                document.getElementById('rotation').innerHTML = value;
-            }
-
-            function tilt(value) {
-                var settings = { tilt: parseInt(value) };
-                rtc.sendMessage('Steer', settings);
-                document.getElementById('tilt').innerHTML = value;
-            }
-
-            function mouth(value) {
-                var settings = { mouth: parseInt(value) };
-                rtc.sendMessage('Steer', settings);
-                document.getElementById('mouth').innerHTML = value;
-            }
+            AFRAME.registerComponent('rotation-reader', {
+                previousRotation: null,
+                tick: function () {
+                    var currentRotation = this.el.object3D.rotation.clone();
+                    if (this.previousRotation.equals(currentRotation)) return;
+                    this.previousRotation = currentRotation;
+                    var rotation = Math.min(Math.max(currentRotation.y, -1.5), 1.5);
+                    rotation = Math.round((800 + (rotation + 1.5) / (1.5 - -1.5) * (2500 - 800)));
+                    var tilt = Math.min(Math.max(currentRotation.x, -.75), .75);
+                    tilt = Math.round((800 + (tilt + .75) / (.75 - -.75) * (2100 - 800)));
+                    console.log(rotation, tilt);
+                    var settings = { rotation: rotation, tilt: tilt };
+                    rtc.sendMessage('Steer', settings);
+                },
+                init: function() {
+                    this.previousRotation = this.el.object3D.rotation.clone();
+                }
+            });
 
             var isSpeaking = false;
             // https://ourcodeworld.com/articles/read/413/how-to-create-a-volume-meter-measure-the-sound-level-in-the-browser-with-javascript
             function checkVolume() {
                 if (meter) {
                     var shouldSpeak = meter.volume > .1;
-                    document.getElementById('volume').innerHTML = meter.volume;
                     if (shouldSpeak && !isSpeaking) {
                         isSpeaking = true;
                         rtc.sendMessage('StartSpeak');
@@ -73,9 +73,7 @@
                     checkVolume();
                 });
                 rtc.on('remoteStream', function(event) {
-                    var videoTag = document.createElement('video');
-                    videoTag.setAttribute('autoplay', 'autoplay');
-                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    var videoTag = document.getElementById('video');
                     videoTag.srcObject = event.stream;
                 });
 
@@ -83,23 +81,23 @@
                 rtc.sendMessage('Center');
 
             });
+            
         </script>
     </head>
     <body>
-        <p><a href="aframe.html">VR Steuerung mit AFRAME</a></p>
-        <div>
-            <p>Kopfdrehung: <span id="rotation"></span></p>
-            <p><input type="range" min="800" value="1600" max="2500" oninput="rotate(this.value);" /></p>
-        </div>
-        <div>
-            <p>Kopfneigung: <span id="tilt"></span></p>
-            <p><input type="range" min="800" value="1350" max="2100" oninput="tilt(this.value);" /></p>
-        </div>
-        <div>
-            <p>Mundöffnung: <span id="mouth"></span></p>
-            <p><input type="range" min="1050" value="1050" max="1500" oninput="mouth(this.value);" /></p>
-        </div>
-        <p>Lautstärke: <span id="volume"></span></p>
-        <div id="remoteVideos"></div>
+        <a-scene light="defaultLightsEnabled: false">
+            <a-entity light="type: ambient; color: #FFF"></a-entity>
+            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-sky color="#ECECEC"></a-sky>
+
+            <a-entity camera look-controls rotation-reader position="0 1.6 0">
+                <a-plane position="0 0 -1" rotation="0 0 0" width="2.6" height="2" material="src: #video"></a-plane>
+            </a-entity>
+
+        </a-scene>
+
+        <video id="video" autoplay="autoplay"></video>
     </body>
 </html>
