@@ -10,7 +10,7 @@ keypress(process.stdin);
 
 var motors = require('./motors');
 motors.init();
-var channel = 0;
+var channel = 15;
 var pos = 1500;
 steer(pos);
 

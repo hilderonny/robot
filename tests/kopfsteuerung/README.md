@@ -11,3 +11,6 @@ Da waren die Adressen `40`und `70` als verfügbar angezeigt.
 |Motor|Min|Center|Max|Erkenntnisse|
 |---|---|---|---|---|
 |Tower Pro SG 90|520|1500|2550|1500 +/- 900|
+|Kopfdrehung Port 14|800|1600|2500||
+|Kopfneigung Port 13|800|1350|2100||
+|Mundöffnung Port 15|1050||1500||
