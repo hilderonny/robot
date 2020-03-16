@@ -50,7 +50,8 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
      * Verbindungsanfrage an Gegenstelle schicken
      */
     self.sendOffer = function(done) {
-        self.peerConnection.createOffer().then(function(localSessionDescription) {
+        var options = {"offerToReceiveAudio":1,"offerToReceiveVideo":1,"voiceActivityDetection":false};
+        self.peerConnection.createOffer(options).then(function(localSessionDescription) {
             localSessionDescription.sdp = localSessionDescription.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1');
             self.peerConnection.setLocalDescription(localSessionDescription);
             self.socket.emit('Message', {
@@ -472,6 +473,8 @@ function WebRTC(localMediaProperties, autoAcceptIncomingCall, sendaudioonly) {
         });
         self.localMediaStream = stream;
         self.sendEvent('localStream', stream);
+    }, function(err) {
+        console.log(err);
     });
 
 }
