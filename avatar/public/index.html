@@ -30,7 +30,7 @@
             // https://ourcodeworld.com/articles/read/413/how-to-create-a-volume-meter-measure-the-sound-level-in-the-browser-with-javascript
             function checkVolume() {
                 if (meter) {
-                    var shouldSpeak = meter.volume > .1;
+                    var shouldSpeak = meter.volume > .05;
                     document.getElementById('volume').innerHTML = meter.volume;
                     if (shouldSpeak && !isSpeaking) {
                         isSpeaking = true;
@@ -50,11 +50,24 @@
                             echoCancellation: false
                         }
                     },
-                    video: undefined
+                    video: false
                 };
                 var jarvisid = false, ready = false;
 
                 rtc = new WebRTC(constraints, true, true);
+                rtc.on('outgoingCallAccepted', function(outgoingConnection) {
+                    console.log('DATACHANNELS', outgoingConnection.sendDataChannel);
+                    var fetchImage = function() {
+                        outgoingConnection.sendDataChannel.send(1);
+                    };
+                    var img = document.createElement('img');
+                    document.body.appendChild(img);
+                    outgoingConnection.handleIncomingData = function(data) {
+                        img.src = data;
+                        setTimeout(fetchImage, 10);
+                    }
+                    outgoingConnection.sendDataChannel.onopen = fetchImage;
+                });
                 rtc.on('clientList', function(newClientList) {
                     Object.values(newClientList).forEach((client) => {
                         if (client.name === 'J.A.R.V.I.S.') {
@@ -73,10 +86,10 @@
                     checkVolume();
                 });
                 rtc.on('remoteStream', function(event) {
-                    var videoTag = document.createElement('video');
-                    videoTag.setAttribute('autoplay', 'autoplay');
-                    document.getElementById('remoteVideos').appendChild(videoTag);
-                    videoTag.srcObject = event.stream;
+                    var audioTag = document.createElement('audio');
+                    audioTag.setAttribute('autoplay', 'autoplay');
+                    document.body.appendChild(audioTag);
+                    audioTag.srcObject = event.stream;
                 });
 
                 // Kopf zentrieren
@@ -100,6 +113,5 @@
             <p><input type="range" min="1050" value="1050" max="1500" oninput="mouth(this.value);" /></p>
         </div>
         <p>Lautstärke: <span id="volume"></span></p>
-        <div id="remoteVideos"></div>
     </body>
 </html>

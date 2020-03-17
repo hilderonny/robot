@@ -12,23 +12,54 @@
                             echoCancellation: false
                         }
                     },
-                    video: true
+                    video: {
+                        width: 800,
+                        height: 600
+                    }
                 };
+
+                var videoTag, videoWidth, videoHeight, canvas, context2D;
+
+                function makeThumbnail() {
+                    context2D.drawImage(videoTag, 0, 0, videoWidth, videoHeight);
+                    return canvas.toDataURL('image/jpeg', .5);
+                }
+
                 var rtc = new WebRTC(constraints, true);
                 rtc.setLocalClientName('J.A.R.V.I.S.');
-                rtc.on('remoteStream', function(event) {
-                    var stream = event.stream;
-                    stream.getVideoTracks().forEach((t) => { stream.removeTrack(t); });
-                    var videoTag = document.createElement('video');
+                rtc.on('incomingCallAccepted', function(incomingConnection) {
+                    console.log('DATACHANNELS', incomingConnection);
+                    incomingConnection.handleIncomingData = function(data) {
+                        var imageDataUrl = makeThumbnail();
+                        incomingConnection.sendDataChannel.send(imageDataUrl);
+                    }
+                });
+                rtc.on('localStream', function(stream) {
+                    videoTag = document.createElement('video');
                     videoTag.setAttribute('autoplay', 'autoplay');
-                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    videoTag.style.visibility = 'hidden';
+                    videoTag.muted = true;
+                    document.body.appendChild(videoTag);
+                    videoTag.addEventListener('play', function() {
+                        canvas = document.createElement('canvas');
+                        videoWidth = videoTag.videoWidth;
+                        videoHeight = videoTag.videoHeight;
+                        canvas.setAttribute('width', videoWidth + 'px');
+                        canvas.setAttribute('height', videoHeight + 'px');
+                        context2D = canvas.getContext('2d');
+                    });
                     videoTag.srcObject = stream;
+                });
+                rtc.on('remoteStream', function(event) {
+                    var audioTag = document.createElement('audio');
+                    audioTag.setAttribute('autoplay', 'autoplay');
+                    document.body.appendChild(audioTag);
+                    audioTag.srcObject = event.stream;
                 });
 
             });
         </script>
     </head>
     <body>
-        <div id="remoteVideos"></div>
     </body>
 </html>
