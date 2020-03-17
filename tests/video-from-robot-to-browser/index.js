@@ -1,71 +1,65 @@
-var express = require('express');
-var https = require('https');
-var fs = require('fs');
-var spawn = require('child_process').spawn;
-var P2J = require('pipe2jpeg');
+var fs = require('fs'); // For reading certificate files
+var express = require('express'); // Webserver
+var https = require('https'); // WebRTC needs SSL connections
+var socketio = require('socket.io'); // Broadcast handshake messages
 
-const params = [
-    '-v',
-    'verbose',
-    '-re',
+var httpsPort = 443; // Change to your needs
 
-/*
-    '-f',
-    'lavfi',
-    '-i',
-    'testsrc=size=1920x1080:rate=15',
-*/
-
-    '-f',
-    'v4l2',
-    '-framerate',
-    '25',
-    '-video_size',
-
-// possible values: 1600x1200 2592x1944 2048x1536 1920x1080 1280x1024 1280x720 1024x768 800x600 640x480 1600x1200
-
-    '640x480',
-    '-i',
-    '/dev/video0',
-
-    '-c:v',
-    'libx264',
-    '-b:v',
-    '5000k',
-    '-f',
-    'hls',
-    '-hls_time',
-    '6',
-    '-hls_list_size',
-    '4',
-    '-hls_wrap',
-    '40',
-    '-hls_delete_threshold',
-    '1',
-    '-hls_flags',
-    'delete_segments',
-    '-hls_start_number_source',
-    'datetime',
-    '-preset',
-    'superfast',
-    '-start_number',
-    '10',
-    './public/stream.m3u8'
-];
-
-// Express application
 var app = express();
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public')); // Serve HTML files from ./public directory
 
-// HTTPS server
-var options = {
-  key: fs.readFileSync('ssl.key'),
-  cert: fs.readFileSync('ssl.crt')
+// Prepare SSL certificates for server. Will result in browser warning about untrusted certificates, but it is okay for local tests
+var credentials = { 
+    key: fs.readFileSync('./priv.key', 'utf8'), 
+    cert: fs.readFileSync('./pub.cert', 'utf8')
 };
-var server = https.createServer(options, app);
-server.listen(443, function() {
-  console.log('Running.');
+
+// Prepare HTTPS server
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(httpsPort, () => { // Start HTTPS server
+    console.log(`HTTPS server is running at port ${httpsPort}.`);
 });
 
-spawn('ffmpeg', params);
-
+// List of connected sockets for direct messaging
+var sockets = {};
+// Prepare websockets and bind them to the HTTPS server
+var io = socketio.listen(httpsServer);
+// Handle incoming connections
+io.on('connection', (socket) => {
+    sockets[socket.id] = socket; // Remember connected socket
+    socket.on('disconnect', () => {
+        delete sockets[socket.id];
+        console.log(`Socket ${socket.id} disconnected.`);
+        // Inform other clients that the peer has disconnected
+        socket.broadcast.emit('Message', {
+            type: 'WebRTCclientDisconnected',
+            content: socket.id
+        });
+    });
+    // Handle incoming messages with tag "Message"
+    socket.on('Message', (message) => {
+        message.from = socket.id;
+        if (message.type === 'WebRTCclientName') {
+            socket.name = message.content;
+        }
+        if (message.to) { // Direct message to other peer
+            var s = sockets[message.to];
+            if (s) s.emit('Message', message);
+            console.log(`Sent message type "${message.type}" from ${message.from} to ${message.to}`);
+        } else { // Broadcast message
+            socket.broadcast.emit('Message', message);
+            console.log(`Sent message type "${message.type}" from ${message.from} to all other`);
+        }
+    });
+    console.log(`Socket ${socket.id} connected.`);
+    socket.broadcast.emit('Message', { // Inform all other peers about new connection
+        type: 'WebRTCclientConnected',
+        content: socket.id
+    });
+    socket.emit('Message', { // Send list of already connected clients to new peer
+        type: 'WebRTCclientList',
+        content: Object.keys(sockets).filter((id) => id !== socket.id).map((id) => {
+            return { id: id, name: sockets[id].name }
+        })
+    });
+});

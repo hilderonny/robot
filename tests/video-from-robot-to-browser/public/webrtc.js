@@ -13,9 +13,13 @@ function WebRTCConnection(socket, remoteClientId, addRemoteStreamCallback) {
 
     self.sendDataChannel = self.peerConnection.createDataChannel("dataChannel");
 
-    peerConnection.ondatachannel = function(evt) {
-        self.receiveDataChannel = evt.channel;
+    self.peerConnection.ondatachannel = function(evt) {
+        evt.channel.onmessage = function(evt) {
+            if (self.handleIncomingData) self.handleIncomingData(evt.data);
+        }
     }
+
+    self.handleIncomingData = function(_) {}
 
     /**
      * Lokalen Videostream festlegen

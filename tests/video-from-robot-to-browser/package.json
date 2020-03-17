@@ -6,7 +6,8 @@
   "author": "Ronny Hildebrandt",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "pipe2jpeg": "^0.3.0"
+    "express": "^4.15.4",
+    "https": "^1.0.0",
+    "socket.io": "^2.0.3"
   }
 }
