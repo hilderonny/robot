@@ -13,6 +13,31 @@ Als Technologien verwende ich:
 
 Die Installation auf ein frisches System kann mit `sudo ./install.sh` aus diesem Verzeichnis erfolgen.
 
+## Status 17.03.2020
+
+Auf der Quest läuft alles sehr ruckelig. Das Videobild ruckt, die kopfbewegungen hacken und die Tonübertragung vom Client zum Roboter laggt und hört sich verzerrt an.
+
+Ich vermutete, dass dies mit der Bandbreite des WebRTC Calls zu tun hatte und habe diesen gesplittet, sodass nur noch Audio übertragen wird und das Videobild als einzeln komprimierte JPEGs im RTC-Datenkanal auf Anfrage verschickt werden. Das funktioniert zwar, bringt aber auf der Quest keine weiteren Vorteile. Läuft alles genauso träge.
+
+Jetzt fallen mir noch diese Probleme und deren Lsungen ein:
+
+* Die WLAN-Verbindung ist zu schwach, wenn der Roboter im Keller steht. Ich hole ihn mal rauf und sehe, was passiert, wenn Quest und Roboter in der Küche oder in der Stube nah bei einander und mit guter Abdeckung laufen
+* Die Quest selbst ist zu schwach. Ich probiere das Ganze mal mit der Rift am Rechner aus und sehe, ob sich dann was ändert.
+* Der Raspi 4 ist zu schwach, um Videostreaming, Tonausgabe, Kopfsteuerung, GUI mit Chrome und Netzwerk zu handhaben. Ich werde dazu den Server selbst auf dem Raspi weiterlaufen lassen, sodass darüber die HTML-Seiten geliefert werden und die Websockt-Verbindung die Motorsteuerung machen kann. Letztere bleibt ebenfalls auf dem Raspi. Daneben schließe ich aber einen Laptop an, an dem das Stereomikrofon und die Kamera und der Lautsprecher hängen. Dieser ruft die server.html auf und liefert damit Bilder und Ton und gibt sich als J.A.R.V.I.S. Endpunkt aus. Dann sehe ich mal, ob die Quest damit klar kommt und nicht doch ausreichend ist. 
+
+## Status 14.03.2020
+
+Als Nächstes kommt die Kopfsteuerung dran. Dazu werde ich eines der Servo-Boards direkt an den PI 4 anschließen. Das Board dient dann auch nur der Kopfsteuerung (links-rechts, oben-unten, Mund auf-zu und eventuell noch zwinkern) und wird vom gleichen Programm gesteuert, dass auch die Websocket-Verbindung zwischen Roboter und Clients verwaltet.
+
+* [Anleitung Servo-Board mit Raspberry](https://tutorials-raspberrypi.de/mehrere-servo-motoren-steuern-raspberry-pi-pca9685/)
+* [I2C mit NodeJS](https://www.npmjs.com/package/i2c-bus)
+
+|Steuerung|Port|I2C Adresse|
+|---|---|---|
+|Links-Rechts|0||
+|Oben-Unten|1||
+|Mund|2||
+
 ## Status 11.03.2020
 
 In `webrtc.js:73` muss ich die `localSessionDescription.sdp` anpassen, um das Stereomikrofon zu aktivieren.
@@ -42,19 +67,6 @@ Allerdings habe ich momentan noch ein Feedback sowohl am Client als auch am Serv
 Der Stream vom Client zum Server muss in ein video-Tag im Server ausgegeben werden, damit man am Roboter Ton hört. Allerdings wird beim Stream-Empfang der Video-Track rausgeschnitten, damit man Performance auf dem Roboter spart.
 
 Der Video-Track wird nach Akzeptieren der Verbinsund sowohl am Client (Sender) als auch auf dem Server (Receiver) aus dem Stream entfernt, um Traffic und Performance zu sparen.
-
-## Status 14.03.2020
-
-Als Nächstes kommt die Kopfsteuerung dran. Dazu werde ich eines der Servo-Boards direkt an den PI 4 anschließen. Das Board dient dann auch nur der Kopfsteuerung (links-rechts, oben-unten, Mund auf-zu und eventuell noch zwinkern) und wird vom gleichen Programm gesteuert, dass auch die Websocket-Verbindung zwischen Roboter und Clients verwaltet.
-
-* [Anleitung Servo-Board mit Raspberry](https://tutorials-raspberrypi.de/mehrere-servo-motoren-steuern-raspberry-pi-pca9685/)
-* [I2C mit NodeJS](https://www.npmjs.com/package/i2c-bus)
-
-|Steuerung|Port|I2C Adresse|
-|---|---|---|
-|Links-Rechts|0||
-|Oben-Unten|1||
-|Mund|2||
 
 ## Status 06.03.2020
 
