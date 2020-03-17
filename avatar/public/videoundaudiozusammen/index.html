@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="volumemeter.js"></script>
+        <script src="webrtc.js"></script>
+        <script>
+            var rtc, meter;
+
+            function rotate(value) {
+                var settings = { rotation: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('rotation').innerHTML = value;
+            }
+
+            function tilt(value) {
+                var settings = { tilt: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('tilt').innerHTML = value;
+            }
+
+            function mouth(value) {
+                var settings = { mouth: parseInt(value) };
+                rtc.sendMessage('Steer', settings);
+                document.getElementById('mouth').innerHTML = value;
+            }
+
+            var isSpeaking = false;
+            // https://ourcodeworld.com/articles/read/413/how-to-create-a-volume-meter-measure-the-sound-level-in-the-browser-with-javascript
+            function checkVolume() {
+                if (meter) {
+                    var shouldSpeak = meter.volume > .1;
+                    document.getElementById('volume').innerHTML = meter.volume;
+                    if (shouldSpeak && !isSpeaking) {
+                        isSpeaking = true;
+                        rtc.sendMessage('StartSpeak');
+                    } else if(!shouldSpeak && isSpeaking) {
+                        rtc.sendMessage('StopSpeak');
+                        isSpeaking = false;
+                    }
+                }
+                window.requestAnimationFrame(checkVolume);
+            }
+
+            window.addEventListener('load', function() {
+                var constraints = {
+                    audio: {
+                        mandatory: {
+                            echoCancellation: false
+                        }
+                    },
+                    video: undefined
+                };
+                var jarvisid = false, ready = false;
+
+                rtc = new WebRTC(constraints, true, true);
+                rtc.on('clientList', function(newClientList) {
+                    Object.values(newClientList).forEach((client) => {
+                        if (client.name === 'J.A.R.V.I.S.') {
+                            jarvisid = client.id;
+                            if (ready) rtc.call(jarvisid);
+                        }
+                    });
+                });
+                rtc.on('localStream', function(stream) {
+                    var audioContext = new window.AudioContext();
+                    var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+                    meter = createAudioMeter(audioContext);
+                    mediaStreamSource.connect(meter);
+                    ready = true;
+                    if (jarvisid) rtc.call(jarvisid);
+                    checkVolume();
+                });
+                rtc.on('remoteStream', function(event) {
+                    var videoTag = document.createElement('video');
+                    videoTag.setAttribute('autoplay', 'autoplay');
+                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    videoTag.srcObject = event.stream;
+                });
+
+                // Kopf zentrieren
+                rtc.sendMessage('Center');
+
+            });
+        </script>
+    </head>
+    <body>
+        <p><a href="aframe.html">VR Steuerung mit AFRAME</a></p>
+        <div>
+            <p>Kopfdrehung: <span id="rotation"></span></p>
+            <p><input type="range" min="800" value="1600" max="2500" oninput="rotate(this.value);" /></p>
+        </div>
+        <div>
+            <p>Kopfneigung: <span id="tilt"></span></p>
+            <p><input type="range" min="800" value="1350" max="2100" oninput="tilt(this.value);" /></p>
+        </div>
+        <div>
+            <p>Mundöffnung: <span id="mouth"></span></p>
+            <p><input type="range" min="1050" value="1050" max="1500" oninput="mouth(this.value);" /></p>
+        </div>
+        <p>Lautstärke: <span id="volume"></span></p>
+        <div id="remoteVideos"></div>
+    </body>
+</html>

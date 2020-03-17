@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- Wird vom Roboter gestartet. Wartet auf Verbindung und streamt Video und Audio -->
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="webrtc.js"></script>
+        <script>
+            window.addEventListener('load', function() {
+                var constraints = {
+                    audio: {
+                        mandatory: {
+                            echoCancellation: false
+                        }
+                    },
+                    video: true
+                };
+                var rtc = new WebRTC(constraints, true);
+                rtc.setLocalClientName('J.A.R.V.I.S.');
+                rtc.on('remoteStream', function(event) {
+                    var stream = event.stream;
+                    stream.getVideoTracks().forEach((t) => { stream.removeTrack(t); });
+                    var videoTag = document.createElement('video');
+                    videoTag.setAttribute('autoplay', 'autoplay');
+                    document.getElementById('remoteVideos').appendChild(videoTag);
+                    videoTag.srcObject = stream;
+                });
+
+            });
+        </script>
+    </head>
+    <body>
+        <div id="remoteVideos"></div>
+    </body>
+</html>

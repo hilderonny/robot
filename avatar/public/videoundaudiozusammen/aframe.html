@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="volumemeter.js"></script>
+        <script src="webrtc.js"></script>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script>
+
+            var rtc, meter;
+
+            AFRAME.registerComponent('rotation-reader', {
+                previousRotation: null,
+                tick: function () {
+                    var currentRotation = this.el.object3D.rotation.clone();
+                    if (this.previousRotation.equals(currentRotation)) return;
+                    this.previousRotation = currentRotation;
+                    var rotation = Math.min(Math.max(currentRotation.y, -1.5), 1.5);
+                    rotation = Math.round((800 + (rotation + 1.5) / (1.5 - -1.5) * (2500 - 800)));
+                    var tilt = Math.min(Math.max(currentRotation.x, -.75), .75);
+                    tilt = Math.round((800 + (tilt + .75) / (.75 - -.75) * (2100 - 800)));
+                    console.log(rotation, tilt);
+                    var settings = { rotation: rotation, tilt: tilt };
+                    rtc.sendMessage('Steer', settings);
+                },
+                init: function() {
+                    this.previousRotation = this.el.object3D.rotation.clone();
+                }
+            });
+
+            var isSpeaking = false;
+            // https://ourcodeworld.com/articles/read/413/how-to-create-a-volume-meter-measure-the-sound-level-in-the-browser-with-javascript
+            function checkVolume() {
+                if (meter) {
+                    var shouldSpeak = meter.volume > .1;
+                    if (shouldSpeak && !isSpeaking) {
+                        isSpeaking = true;
+                        rtc.sendMessage('StartSpeak');
+                    } else if(!shouldSpeak && isSpeaking) {
+                        rtc.sendMessage('StopSpeak');
+                        isSpeaking = false;
+                    }
+                }
+                window.requestAnimationFrame(checkVolume);
+            }
+
+            window.addEventListener('load', function() {
+                var constraints = {
+                    audio: {
+                        mandatory: {
+                            echoCancellation: false
+                        }
+                    },
+                    video: undefined
+                };
+                var jarvisid = false, ready = false;
+
+                rtc = new WebRTC(constraints, true, true);
+                rtc.on('clientList', function(newClientList) {
+                    Object.values(newClientList).forEach((client) => {
+                        if (client.name === 'J.A.R.V.I.S.') {
+                            jarvisid = client.id;
+                            if (ready) rtc.call(jarvisid);
+                        }
+                    });
+                });
+                rtc.on('localStream', function(stream) {
+                    var audioContext = new window.AudioContext();
+                    var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+                    meter = createAudioMeter(audioContext);
+                    mediaStreamSource.connect(meter);
+                    ready = true;
+                    if (jarvisid) rtc.call(jarvisid);
+                    checkVolume();
+                });
+                rtc.on('remoteStream', function(event) {
+                    var videoTag = document.getElementById('video');
+                    videoTag.srcObject = event.stream;
+                });
+
+                // Kopf zentrieren
+                rtc.sendMessage('Center');
+
+            });
+            
+        </script>
+    </head>
+    <body>
+        <a-scene light="defaultLightsEnabled: false">
+            <a-entity light="type: ambient; color: #FFF"></a-entity>
+
+            <a-entity camera look-controls rotation-reader position="0 1.6 0">
+                <a-plane position="0 0 -2" rotation="0 0 0" width="7.8" height="6" material="src: #video"></a-plane>
+            </a-entity>
+
+        </a-scene>
+
+        <video id="video" autoplay="autoplay"></video>
+    </body>
+</html>
